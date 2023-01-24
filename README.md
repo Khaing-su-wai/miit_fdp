@@ -17,6 +17,7 @@ mkdir vsd
  cd ..  
  cd verilog_files  
  Below screenshot shows the above directory structure inside the vsd upto my_lib directories that was set up through the terminal.
+ 
  ![image](https://user-images.githubusercontent.com/123365828/214255272-44106959-5909-47ff-bf6e-2610e6dcbac7.png)
  
 ![image](https://user-images.githubusercontent.com/123365828/214255695-edbf73db-6810-4915-b545-4a2ec5420e7f.png)
@@ -26,11 +27,13 @@ mkdir vsd
 ![image](https://user-images.githubusercontent.com/123365828/214255774-45b44fc5-2ac0-4f56-8b33-48518e4701f4.png)
 
 iverilog good_mux.v tb_good_mux.v
+
 As a result of the above , a. file is created which can be seen in the list of verilog files.
 
 ![image](https://user-images.githubusercontent.com/123365828/214256470-0c2ee789-96b9-4724-8481-3e66e7575f96.png)
 
 ./a.out
+
 gtkwave tb_good_mux.vcd
 
 ![image](https://user-images.githubusercontent.com/123365828/214256952-a6476c1d-a80e-4d3f-8bae-34dc723d6d0a.png)
@@ -38,6 +41,7 @@ gtkwave tb_good_mux.vcd
 ![image](https://user-images.githubusercontent.com/123365828/214256981-d6e078fe-5fc7-404f-bcd5-22c81fbb1a2f.png)
 
 We can also view our Verilog RTL design and testbench code using
+
 vim tb_good_mux.v -o good_mux.v
 
 ![image](https://user-images.githubusercontent.com/123365828/214257254-72ddbb63-099a-49b4-941f-9a1d9398ba02.png)
@@ -45,7 +49,9 @@ vim tb_good_mux.v -o good_mux.v
 ![image](https://user-images.githubusercontent.com/123365828/214257295-be8ae55b-2a01-4a4e-9558-2b25599b8fc7.png)
 
 Labs using Yosys and Sky130 PDKs
+
 Commands to obtain a synthesized implementation of good_mux design
+
 The commands to synthesise a rtl code called good_mux is as follows:
 
 yosys
