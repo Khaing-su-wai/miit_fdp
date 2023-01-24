@@ -1,7 +1,11 @@
 # miit_fdp
+
 Day1 Content
+
 Introduction to Verilog RTL design and Synthesis
+
 Labs using iverilog and gtkwave
+
 mkdir vsd  
  cd vsd  
  git clone https://github.com/kunalg123/vsdflow.git  
@@ -175,6 +179,22 @@ Asynchoronous and Synchronous resets
 
 Verilog codes of asynchronous reset and set :
 
+![Capture17](https://user-images.githubusercontent.com/123365828/214333940-519a92cf-a80f-4c77-aa5e-c61b2d02ed7f.PNG)
+
+GTKWAVE RTL Simulation and Observations :
+
+![Capture18](https://user-images.githubusercontent.com/123365828/214339590-30e8c402-9fbf-41b7-a0af-62bb26a1a3cf.PNG)
+
+Q follows d only at the posedge of the clock.
+But as and when async_rest=1,Q becomes 0 without waiting for the next edge of the clock.
+
+![Capture19](https://user-images.githubusercontent.com/123365828/214340049-a8344f5f-e529-4d78-970e-8ccebe25303c.PNG)
+
+But when async_reset goes low(1 to 0),Q doesn't become 1 immediately ,it waits for the next clock edge to follow D.
+Even if asunc_reset=1 and D=1, Q=0 as reset takes high precedence(that is how the code has been written,if condition of reset is checked first).
+
+Synthesis implementation results :
+asynchoronous reset :
 
 
 
