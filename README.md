@@ -1,6 +1,6 @@
 # miit_fdp
 Day1 Content
-Day 1 - Introduction to Verilog RTL design and Synthesis
+Introduction to Verilog RTL design and Synthesis
 Labs using iverilog and gtkwave
 mkdir vsd  
  cd vsd  
@@ -152,6 +152,29 @@ We use flatten to generate a flat netlist. Here there are no instances of U1 and
 ![Capture14](https://user-images.githubusercontent.com/123365828/214313683-c6a17a25-2ca8-4efc-a075-0d81def0d83e.PNG)
 
 ‌‌Even in the design view using show command we see that it simply displays the structure completely without any hierarchy.
+
+![Capture15](https://user-images.githubusercontent.com/123365828/214318050-75229e09-433e-4ebe-b348-321add3962ef.PNG)
+
+SUB MODULE LEVEL SYNTHESIS AND ITS NECESSITY
+
+Hence we control the model that we are synthesizing using the keywords
+
+  synth-top "sub-module's name"
+  
+  In the following example, I am going to synthesize at sub_module 1 level although I have read the RTL file at higher module level multi_modules.v
+
+read_verilog multiple_modules.v
+
+synth -top sub_module1
+
+![Capture16](https://user-images.githubusercontent.com/123365828/214321876-8d972232-787c-4615-9abb-067b874ca286.PNG)
+
+Notice ,In the synthesis report,it inferring only 1 AND gate.
+
+Asynchoronous and Synchronous resets
+
+Verilog codes of asynchronous reset and set :
+
 
 
 
