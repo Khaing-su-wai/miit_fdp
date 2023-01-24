@@ -60,3 +60,20 @@ read_verilog good_mux.v
 synth -top good_mux
 abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
+
+![image](https://user-images.githubusercontent.com/123365828/214258249-c63ab906-0612-4733-89cd-22890799f21d.png)
+
+![image](https://user-images.githubusercontent.com/123365828/214258333-0f74d627-de0a-40fe-a92f-9e58d5969e4d.png)
+
+![image](https://user-images.githubusercontent.com/123365828/214258403-452f8085-0a7f-41cb-8ef4-a0160c6e01f9.png)
+
+Commands to write a netlist
+
+write_verilog -noattr good_mux_netlist.v
+
+!vim  good mux_netlist.v
+
+![image](https://user-images.githubusercontent.com/123365828/214258553-689257e7-3c06-404e-9c3f-97f83e88e008.png)
+
+
+
