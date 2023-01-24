@@ -194,8 +194,72 @@ But when async_reset goes low(1 to 0),Q doesn't become 1 immediately ,it waits f
 Even if asunc_reset=1 and D=1, Q=0 as reset takes high precedence(that is how the code has been written,if condition of reset is checked first).
 
 Synthesis implementation results :
+
 asynchoronous reset :
 
+![Capture20](https://user-images.githubusercontent.com/123365828/214342753-e7234b7d-1b1f-4356-86a6-6df13eebe339.PNG)
+
+asynchronous set:
+
+![Capture21](https://user-images.githubusercontent.com/123365828/214345630-c46855af-dc88-45ac-b843-eb776c9fe9a6.PNG)
+
+Synchronous Reset and set : On application of set or reset signals,the signal does not immediately goes high or low,but it waits for the next edge of the clock cycle. RTL code of synchronous reset:
+
+![Capture22](https://user-images.githubusercontent.com/123365828/214346188-48aa20a7-bc72-4cf6-a2c3-67d3b8828203.PNG)
+
+Synthesis Results:
+
+![Capture23](https://user-images.githubusercontent.com/123365828/214347333-083931ac-65c0-49af-aef4-325501c1f3f4.PNG)
+
+Case wherein both both asynchronous and synchronous resets are applied together :
+
+RTL CODE:
+
+![Capture24](https://user-images.githubusercontent.com/123365828/214348058-d52e669d-661f-4e58-bdef-a0b32b4b7363.PNG)
+
+Synthesis results:
+
+![Capture25](https://user-images.githubusercontent.com/123365828/214348855-31726c6e-1b95-4f8b-bd87-4b9d7e919c40.PNG)
+
+OPTIMISATIONS
+
+We now observe some Interesting Optimisations For Special Cases :
+
+Case 1:
+
+Let's Consider the following design where the 3 bit input is multiplied by 2 and the output is a 4 bit value.
+
+module mul2 (input [2:0] a , output [3:0] y);
+
+	assign y = a* 2;
+ 
+endmodule
+
+Observation : The output y[3:0] is the input a[2:0] appended with a 0 at the LSB. or, we can say that y = aX2 = {a,0} .
+
+On synthesizing the netlist and look at its graphical realisation , we will see the same optimisation occuring in the netlist.There is no hardware required fot it.
+
+![Capture26](https://user-images.githubusercontent.com/123365828/214351670-089578a9-0a0e-41f1-ae18-994c9f56c1c9.PNG)
+
+Case 2:
+
+Let's consider the following design where the 3 bit input is multiplied by 9 and the output is a 6 bit value.
+
+module mult8 (input [2:0] a , output [5:0] y);
+
+	assign y = a* 9;
+ 
+endmodule
+
+Observation : The output y[5:0] is equal to the input a[2:0] appended with itself i.e.
+
+y = aX9 = aX(8+1)= aX8+aX1 = {a,0}+a 
+
+y = {a,a}
+
+On synthesizing the netlist and look at it's graphical realisation , we will see the same optimisation occuring in the netlist.
+
+![Capture27](https://user-images.githubusercontent.com/123365828/214353493-7b941831-3a58-4ef1-b722-d942e9f0c7ec.PNG)
 
 
 
