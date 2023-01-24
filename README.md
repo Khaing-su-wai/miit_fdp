@@ -77,4 +77,89 @@ write_verilog -noattr good_mux_netlist.v
 
 DAY2 : TIMING LIBS, HIERARCHICAL Vs FLAT SYNTHESIS AND EFFICIENT FLOP CODING STYLES
 
+!vim ../my_lib/lib/SKY130_fd_sc_hd__tt_025C_1v80.lib
+
+The following window appears that shows the library file SKY130_fd_sc_hd__tt_025C_1v80.lib
+
+![Capture1](https://user-images.githubusercontent.com/123365828/214277544-844e968f-a181-48e5-8fdf-7cefe8c26809.PNG)
+
+Switching off the syntax color red
+
+  Command used : syn off
+  
+Enabling the line numbers
+
+  Command used :se nu
+
+We can see that the lib file contains the technology and units of all the parameters.
+
+![Capture2](https://user-images.githubusercontent.com/123365828/214278585-be2b6a7f-ac71-46b7-a076-6050117d8b69.PNG)
+
+The voltage process and temperature conditions are also specified.
+
+![Capture3](https://user-images.githubusercontent.com/123365828/214279285-f32862c7-e24f-4a0e-af22-8cb253921fa5.PNG)
+
+The lib contains different flavors of this same as well as different types of cells.
+
+![Capture4](https://user-images.githubusercontent.com/123365828/214279642-0cc0864f-2315-4d0b-a836-c025d3baec4f.PNG)
+
+![Capture5](https://user-images.githubusercontent.com/123365828/214280120-a2ed7c69-6a8b-4518-a504-e607a70bb87b.PNG)
+
+As we see in the above window,
+
+The library also represents the different features of the cell like its leakage power,the various input's combinations and the operations between them.
+
+ Inside the cell block we have different power combinations and their respective leakage power values. It also shows the area. It gives the description of various pin in terms of their capacitance transition , internal power and the delay associated with this pins.
+ 
+ ![Capture6](https://user-images.githubusercontent.com/123365828/214297435-9630a58b-4e40-4b77-b883-3d37c296dd7f.PNG)
+ 
+ We pick a small gate small gate for better understanding. We see it's behaviour view.
+ 
+ ![Capture7](https://user-images.githubusercontent.com/123365828/214298354-fbcc5ad5-e14c-4d23-89a4-f6bd62b45f9e.PNG)
+ 
+ We now perform the comparison between the and gates.
+ 
+ ![Capture8](https://user-images.githubusercontent.com/123365828/214306598-1fbaf219-43b4-4f04-98f3-37c021c60e0f.PNG)
+
+HIERARCHIAL VS FLAT SYNTHESIS
+
+While syntheisizing the RTL design in which multiple modules are present, the synthesis can be done in two forms.
+
+vim multiple_modules.v
+
+![Capture9](https://user-images.githubusercontent.com/123365828/214307541-0ffa8ce6-c2b9-452e-ae83-8c2f56c30c61.PNG)
+
+It has two some moduels. The module 1 is an OR gate ,sub module 2 is AND gate. The sub module called multiple modules instantiates sub module 1 as u1 and sub module 2 as u2.
+
+yosys
+
+![Capture10](https://user-images.githubusercontent.com/123365828/214310390-2b79ad42-d866-41b6-b8b9-446933b8fab2.PNG)
+
+![Capture11](https://user-images.githubusercontent.com/123365828/214311042-47416020-e2eb-467d-a5a0-6552643d48b3.PNG)
+
+![Capture12](https://user-images.githubusercontent.com/123365828/214311323-847f4ac3-aede-438b-8120-4a3564c41b05.PNG)
+
+Now we link this design to the library using abc command. To show the graphical version ,we use the command.
+
+show multiple_modules
+
+![Capture13](https://user-images.githubusercontent.com/123365828/214311722-ed198835-8a18-4057-a870-5f9164c2919b.PNG)
+
+Instead of or and and gates it shows the instances u1 and u2 while preserving the hierarchy. This is called the hierarchical design.
+
+We use flatten to generate a flat netlist. Here there are no instances of U1 and U2 and hierarchy is not present.
+
+![Capture14](https://user-images.githubusercontent.com/123365828/214313683-c6a17a25-2ca8-4efc-a075-0d81def0d83e.PNG)
+
+‌‌Even in the design view using show command we see that it simply displays the structure completely without any hierarchy.
+
+
+
+
+
+
+
+
+
+
 
