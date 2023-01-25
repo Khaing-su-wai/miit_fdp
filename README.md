@@ -1,10 +1,10 @@
 # miit_fdp
 
-#Day1 Content
+# Day1 Content
 
-#Introduction to Verilog RTL design and Synthesis
+# Introduction to Verilog RTL design and Synthesis
 
-#Labs using iverilog and gtkwave
+# Labs using iverilog and gtkwave
 
 mkdir vsd  
  cd vsd  
@@ -52,7 +52,7 @@ vim tb_good_mux.v -o good_mux.v
 
 ![image](https://user-images.githubusercontent.com/123365828/214257295-be8ae55b-2a01-4a4e-9558-2b25599b8fc7.png)
 
-#Labs using Yosys and Sky130 PDKs
+# Labs using Yosys and Sky130 PDKs
 
 Commands to obtain a synthesized implementation of good_mux design
 
@@ -79,7 +79,7 @@ write_verilog -noattr good_mux_netlist.v
 
 ![image](https://user-images.githubusercontent.com/123365828/214258553-689257e7-3c06-404e-9c3f-97f83e88e008.png)
 
-#DAY2 : TIMING LIBS, HIERARCHICAL Vs FLAT SYNTHESIS AND EFFICIENT FLOP CODING STYLES
+# DAY2 : TIMING LIBS, HIERARCHICAL Vs FLAT SYNTHESIS AND EFFICIENT FLOP CODING STYLES
 
 !vim ../my_lib/lib/SKY130_fd_sc_hd__tt_025C_1v80.lib
 
@@ -125,7 +125,7 @@ The library also represents the different features of the cell like its leakage 
  
  ![Capture8](https://user-images.githubusercontent.com/123365828/214306598-1fbaf219-43b4-4f04-98f3-37c021c60e0f.PNG)
 
-#HIERARCHIAL VS FLAT SYNTHESIS
+# HIERARCHIAL VS FLAT SYNTHESIS
 
 While syntheisizing the RTL design in which multiple modules are present, the synthesis can be done in two forms.
 
@@ -159,7 +159,7 @@ We use flatten to generate a flat netlist. Here there are no instances of U1 and
 
 ![Capture15](https://user-images.githubusercontent.com/123365828/214318050-75229e09-433e-4ebe-b348-321add3962ef.PNG)
 
-#SUB MODULE LEVEL SYNTHESIS AND ITS NECESSITY
+# SUB MODULE LEVEL SYNTHESIS AND ITS NECESSITY
 
 Hence we control the model that we are synthesizing using the keywords
 
@@ -175,7 +175,7 @@ synth -top sub_module1
 
 Notice ,In the synthesis report,it inferring only 1 AND gate.
 
-#Asynchoronous and Synchronous resets
+# Asynchoronous and Synchronous resets
 
 Verilog codes of asynchronous reset and set :
 
@@ -223,7 +223,7 @@ Synthesis results:
 ![Capture25](https://user-images.githubusercontent.com/123365828/214500040-ace712d4-73c4-4ab0-b8c4-bce2c4d596ce.PNG)
 
 
-#OPTIMISATIONS
+# OPTIMISATIONS
 
 We now observe some Interesting Optimisations For Special Cases :
 
