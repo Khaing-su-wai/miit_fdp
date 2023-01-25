@@ -271,7 +271,7 @@ Inorder to produce a digital circuit design which is optimised interms of area a
 
 1.Combinational optimisation methods:
 
--Squezzing the logic to get the most optimised design
+#  Squezzing the logic to get the most optimised design
 -Area and Power savings
 -Constant propogation
 -Direct Optimisation
