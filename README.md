@@ -267,7 +267,7 @@ On synthesizing the netlist and look at it's graphical realisation , we will see
 
 # Introduction to Logic optimisations
 
-Inorder to produce a digital circuit design which is optimised interms of area and power, the simulator performs many types of optimisations on the combinational and sequential circuits.
+The simulator performs multiple types of optimization techniques on the combinational and sequential circuits in order to provide a digital circuit design that is optimized in terms of area and power.
 
 1.Combinational optimisation methods:
 
@@ -301,7 +301,7 @@ Inorder to produce a digital circuit design which is optimised interms of area a
 
 # Combinational Logic Optimisations
 
-We will try to understand each of the above mentioned combinational optimisations through different RTL code examples. For each example, We also check the synthesis implementation through yosys to understand how the optimisations take place.
+To understand each of the above mentioned combinational optimizations through different RTL code examples, also check the synthesis implementation through yosys to understand how the optimisations take place.
 
 All the optimisation examples are in files opt_check.v, opt_check4.v, and multiple_modules_opt.v. All of these files are present under the verilog_files directory.
 
@@ -315,15 +315,15 @@ module opt_check (input a, input b , output y);
 	
 endmodule
 
-Ideally ,the above ternary operator should give us a mux. But the constant 0 propagates further in the logic .Using boolean simplification we obtain y = ab.
+The ternary operator mentioned above should produce a mux. The reasoning, however, continues to propagate the constant 0. We get y = ab by using boolean simplification.
 
 Synthesizing this in yosys :
 
-Before realising the netlist, we must issue a command to yosys to perform optimisations. It removes all unused cells and wires to prduce optimised digital circuit.This can be done using the opt_clean -purge command as shown below.
+We need to provide Yosys a command to optimize things before realizing the netlist. To create an optimized digital circuit, all unused cells and wires are removed. The opt clean -purge command can be used to accomplish this, as seen below.
 
 ![Capture1](https://user-images.githubusercontent.com/123365828/214542383-fd51671c-237e-4099-8d45-f867f8f6e286.PNG)
 
-Observation : After executing synth -top opt_check ,we see in the report that 1 AND gate gas been inferred.
+Observation: When we run synth -top opt_check, we observe that 1 AND gate has been inferred in the report.
 
 Next,
 
@@ -333,7 +333,7 @@ Next,
  
  show
 
-On viewing the graphical synthesis realisation , we can see the Yosys has synthesized an AND gate as expected.
+We can see that the Yosys has synthesized an AND gate as anticipated by checking at the graphical synthesis realisation.
 
 ![Capture2](https://user-images.githubusercontent.com/123365828/214544597-3675e826-cd7d-427e-9c50-3c0d10d34d67.PNG)
 
