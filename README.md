@@ -201,7 +201,7 @@ asynchoronous reset :
 
 asynchronous set:
 
-![Capture21](https://user-images.githubusercontent.com/123365828/214345630-c46855af-dc88-45ac-b843-eb776c9fe9a6.PNG)
+![Capture28](https://user-images.githubusercontent.com/123365828/214495633-90dd0237-39f1-4f1e-8275-5b299c8410f0.PNG)
 
 Synchronous Reset and set : On application of set or reset signals,the signal does not immediately goes high or low,but it waits for the next edge of the clock cycle. RTL code of synchronous reset:
 
