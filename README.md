@@ -379,6 +379,55 @@ endmodule
 
 In this case,the boolean logic optimisation simplifies the output to a single xnor gate i.e. y = a xnor c. Next we generate the netlist and observe its graphical representation after synthesis
 
+![Capture5](https://user-images.githubusercontent.com/123365828/214553656-d7491278-4c60-4661-8215-c5669cbeb467.PNG)
+
+Yosys synthesizes a 3 input XNOR gate as expected because of optimisations.
+
+Example 5:multiple_module_opt.v
+
+module sub_module1(input a , input b , output y);
+
+	assign y = a & b;
+	
+endmodule
+
+module sub_module2(input a , input b , output y);
+
+	assign y = a^b;
+	
+endmodule
+
+module multiple_module_opt(input a , input b , input c , input d , output y);
+
+wire n1, n2, n3;
+
+
+sub_module1 U1 (.a(a), .b(1'b1), .y(n1));
+
+sub_module2 U2 (.a(n1), .b(1'b0), .y(n2));
+
+sub_module2 U3 (.a(b),  .b(d), .y(n3));
+
+assign y =c | (b & n1);
+
+endmodule
+
+![Capture6](https://user-images.githubusercontent.com/123365828/214555292-c8041a6e-d824-47e2-9188-84c0a94f0e38.PNG)
+
+While synthesizing this in yosys we use flatten before opt_clean -purge. The multiple_module_opt instantiates both submodule1 and 2. We must use Flat Synthesis here otherwise the optimisations will not be performed on the sub module level.
+
+![Capture7](https://user-images.githubusercontent.com/123365828/214555728-2b923284-6e3b-4c41-a54d-83f36d011d1a.PNG)
+
+Example 5: multiple_module_opt2.v
+
+![Capture8](https://user-images.githubusercontent.com/123365828/214556274-7be8a009-fccf-437d-ad49-6ac8d8bff55c.PNG)
+
+On boolean optimisation, we obtain y=1 simply. It's synthesis yields:
+
+![Capture9](https://user-images.githubusercontent.com/123365828/214556931-fdeb4e66-00a9-4cfb-a60c-3ee683c84d9e.PNG)
+
+# Sequential Logic Optimisations
+
 
 
 
