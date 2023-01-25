@@ -263,6 +263,35 @@ On synthesizing the netlist and look at it's graphical realisation , we will see
 
 ![Capture27](https://user-images.githubusercontent.com/123365828/214353493-7b941831-3a58-4ef1-b722-d942e9f0c7ec.PNG)
 
+# DAY 3 : Combinational and Sequential Optimisations
+
+# Introduction to Logic optimisations
+
+Inorder to produce a digital circuit design which is optimised interms of area and power, the simulator performs many types of optimisations on the combinational and sequential circuits.
+
+1.Combinational optimisation methods:
+
+-Squezzing the logic to get the most optimised design
+-Area and Power savings
+-Constant propogation
+-Direct Optimisation
+-Boolean Logic Optimisation
+-K-map
+-Quine-mckluskey Algorithm
+
+2.Sequential optimisation methods:
+
+-Basic
+-Sequential constant Propogation
+-Advanced
+-State Optimisation
+-Retiming
+-Sequential Logic Cloning (Floor Plan Aware Synthesis)
+
+# Combinational Logic Optimisations
+
+
+
 
 
 
