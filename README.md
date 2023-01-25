@@ -209,7 +209,7 @@ Synchronous Reset and set : On application of set or reset signals,the signal do
 
 Synthesis Results:
 
-![Capture23](https://user-images.githubusercontent.com/123365828/214347333-083931ac-65c0-49af-aef4-325501c1f3f4.PNG)
+![Capture29](https://user-images.githubusercontent.com/123365828/214496454-c3a8e8ec-1b1b-406f-b7ca-1020f5bbb214.PNG)
 
 Case wherein both both asynchronous and synchronous resets are applied together :
 
