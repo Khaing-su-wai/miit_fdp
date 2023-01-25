@@ -219,7 +219,8 @@ RTL CODE:
 
 Synthesis results:
 
-![Capture25](https://user-images.githubusercontent.com/123365828/214348855-31726c6e-1b95-4f8b-bd87-4b9d7e919c40.PNG)
+![Capture30](https://user-images.githubusercontent.com/123365828/214498275-656cbebb-4d1b-4e83-97e7-eb6d5cd5f626.PNG)
+
 
 OPTIMISATIONS
 
