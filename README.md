@@ -59,10 +59,10 @@ Commands to obtain a synthesized implementation of good_mux design
 The commands to synthesise a rtl code called good_mux is as follows:
 
 yosys
-read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 read_verilog good_mux.v
 synth -top good_mux
-abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
 
 ![image](https://user-images.githubusercontent.com/123365828/214258249-c63ab906-0612-4733-89cd-22890799f21d.png)
@@ -81,7 +81,7 @@ write_verilog -noattr good_mux_netlist.v
 
 # DAY2 : TIMING LIBS, HIERARCHICAL Vs FLAT SYNTHESIS AND EFFICIENT FLOP CODING STYLES
 
-!vim ../my_lib/lib/SKY130_fd_sc_hd__tt_025C_1v80.lib
+!vim ../lib/SKY130_fd_sc_hd__tt_025C_1v80.lib
 
 The following window appears that shows the library file SKY130_fd_sc_hd__tt_025C_1v80.lib
 
@@ -327,7 +327,7 @@ Observation : After executing synth -top opt_check ,we see in the report that 1 
 
 Next,
 
- abc -liberty ../my_lib/lib/sky130_fd_sc_hd_tt_025C_1v80.lib 
+ abc -liberty ../lib/sky130_fd_sc_hd_tt_025C_1v80.lib 
  
  write_verilog -noattr opt_check_netlist.v 
  
@@ -428,6 +428,149 @@ On boolean optimisation, we obtain y=1 simply. It's synthesis yields:
 
 # Sequential Logic Optimisations
 
+We will try to understand each of the sequential optimisations through different RTL code examples. For each example, We also check the synthesis implementation through yosys to understand how the optimisations take place.
+
+All the optimisation examples are in files dff_const2.v,dff_const3.v,dffconst4.v and dff_const5.v. All of these files are under the verilog_files directory.
+
+Example 1: dff_const1.v
+
+module dff_const1(input clk, input reset, output reg q);
+
+always @(posedge clk, posedge reset)
+
+begin
+
+	if(reset)
+	
+		q <= 1'b0;
+		
+	else
+	
+		q <= 1'b1;
+		
+end
+
+endmodule
+
+Here, it appears that the output Q should be equal to an inverted reset or Q=!reset. However, as the reset is synchronous,even if the flop has D pinned to logic 1,when reset becomes 0, Q does not immediately goto 1. It waits untill the positive edge of the next clock cycle.
+
+This is observed by simulating the design in verilog, and viewing the VCD with GTKWave as follows
+
+![Capture10](https://user-images.githubusercontent.com/123365828/214559092-11ca01c3-7de2-4286-9119-1d297db20fd8.PNG)
+
+Observation : In the gtk waveform above , when reset becomes 0, Q becomes 1 at the next clock edge. Since Q can be either 1 or 0,we do not get a sequential constant, and no optimisations should be possible here. We verify it using Yosys synthesis and optimisation.
+
+While synthesis,We use
+
+dfflibmap -liberty ../lib/sky130_fd_sc_hd_tt_025C_1v80.lib
+
+dfflibmap is a switch that tells the synthesizer about the library to pick sequential circuits( mainly Dff's and latches) from.
+
+We then generate the netlist
+
+abc -liberty ../lib/sky130_fd_sc_hd_tt_025C_1v80.lib 
+
+write_verilog -noattr dff_const1_netlist.v 
+
+show
+
+![Capture11](https://user-images.githubusercontent.com/123365828/214562722-23147829-d9b8-49a7-85fc-e04f4874d6fc.PNG)
+
+As expected, No optimisation is performed in th yosys implementation during synthesis.
+
+Example 2 : dff_const2.v
+
+module dff_const2(input clk, input reset, output reg q);
+
+always @(posedge clk, posedge reset)
+
+begin
+
+	if(reset)
+	
+		q <= 1'b1;
+		
+	else
+	
+		q <= 1'b1;
+		
+end
+
+endmodule
+
+Here, Regardless of the inputs, the output q always remains constant at 1 .
+
+This is observed by simulating the design in verilog, and viewing the VCD with GTKWave as follows
+
+![Capture12](https://user-images.githubusercontent.com/123365828/214564430-4d9c030c-f35f-4d54-9f92-c54166fe9b0c.PNG)
+
+Since the output is always constant ie Q=1, it can easily be optimised during synthesis.
+
+![Capture13](https://user-images.githubusercontent.com/123365828/214565465-fb3bb89c-9ef8-492f-9d22-a92ca7c7243f.PNG)
+
+Example 3 : dff_const3.v
+
+module dff_const3(input clk, input reset, output reg q);
+
+reg q1;
+
+always @(posedge clk, posedge reset)
+
+begin
+
+	if(reset)
+	
+	begin
+	
+		q <= 1'b1;
+		
+		q1 <= 1'b0;
+		
+	end
+	
+	else
+	
+	begin 
+	
+		q1 <= 1'b1;
+		
+		q <= q1;
+		
+	end
+	
+end
+
+endmodule
+
+When reset goes from 1 to 0,Q1 follows D at the next positive clock edge in an ideal ckt. But in reality, Q1 becomes 1 a little after the next positive clk edge(once reset has been made 0)due to Clock-to-Q delay.
+
+Thus, q takes the value 0 until the next clock edge when it read an input of 1 from q1. This is confirmed with the simulated waveform below.
+
+![Capture14](https://user-images.githubusercontent.com/123365828/214566952-b738a5b3-c3bc-4bf1-9f3f-8c771198b9fb.PNG)
+
+Since Q takes both logic 0 and 1 values in different clock cycles. It is wrong to say that Q=!(reset) or Q=Q1
+
+Hence, both the flip-flops are retained and no optimisations are performed on this design. We can confirm this using Yosys as shown below.
+
+![Capture15](https://user-images.githubusercontent.com/123365828/214567999-c97f1a06-b0ca-46f6-bf76-61b6d1d1d90f.PNG)
+
+Both the D flip-flops are present in the synthesized netlist.
+
+Example 4: dff_const4.v
+
+RTL Code:
+
+![Capture16](https://user-images.githubusercontent.com/123365828/214568539-1bb25c1f-3e57-41e0-b5e5-020af438ab84.PNG)
+
+Here, regardless of the input whether reset or not , Q1 is always going to be constant i.e. Q1=1 . As q can only be 1 or q1 depending on the reset input , but q1 = 1 .Thus q is also constant at the value 1. We can confirm this with the simulated waveforms as shown below.
+
+![Capture17](https://user-images.githubusercontent.com/123365828/214569832-65bc23b1-1d61-4205-a4c6-a226ba37f12a.PNG)
+
+As the output is always constant, it can easily be optimised using Yosys as shown in the graphical representation.
+
+![Capture18](https://user-images.githubusercontent.com/123365828/214571342-d60b6791-c4ae-4dc7-acf5-e1496b954788.PNG)
+
+unutilized output optimizations
 
 
 
