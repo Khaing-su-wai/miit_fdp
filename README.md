@@ -271,25 +271,113 @@ Inorder to produce a digital circuit design which is optimised interms of area a
 
 1.Combinational optimisation methods:
 
-#  Squezzing the logic to get the most optimised design
+-Squezzing the logic to get the most optimised design
+
 -Area and Power savings
+
 -Constant propogation
+
 -Direct Optimisation
+
 -Boolean Logic Optimisation
+
 -K-map
+
 -Quine-mckluskey Algorithm
 
 2.Sequential optimisation methods:
 
 -Basic
+
 -Sequential constant Propogation
+
 -Advanced
+
 -State Optimisation
+
 -Retiming
+
 -Sequential Logic Cloning (Floor Plan Aware Synthesis)
 
 # Combinational Logic Optimisations
 
+We will try to understand each of the above mentioned combinational optimisations through different RTL code examples. For each example, We also check the synthesis implementation through yosys to understand how the optimisations take place.
+
+All the optimisation examples are in files opt_check.v, opt_check4.v, and multiple_modules_opt.v. All of these files are present under the verilog_files directory.
+
+Example 1:
+
+opt_check.v
+
+module opt_check (input a, input b , output y);
+
+	assign y = a?b:0;
+	
+endmodule
+
+Ideally ,the above ternary operator should give us a mux. But the constant 0 propagates further in the logic .Using boolean simplification we obtain y = ab.
+
+Synthesizing this in yosys :
+
+Before realising the netlist, we must issue a command to yosys to perform optimisations. It removes all unused cells and wires to prduce optimised digital circuit.This can be done using the opt_clean -purge command as shown below.
+
+![Capture1](https://user-images.githubusercontent.com/123365828/214542383-fd51671c-237e-4099-8d45-f867f8f6e286.PNG)
+
+Observation : After executing synth -top opt_check ,we see in the report that 1 AND gate gas been inferred.
+
+Next,
+
+ abc -liberty ../my_lib/lib/sky130_fd_sc_hd_tt_025C_1v80.lib 
+ 
+ write_verilog -noattr opt_check_netlist.v 
+ 
+ show
+
+On viewing the graphical synthesis realisation , we can see the Yosys has synthesized an AND gate as expected.
+
+![Capture2](https://user-images.githubusercontent.com/123365828/214544597-3675e826-cd7d-427e-9c50-3c0d10d34d67.PNG)
+
+Example 2:
+
+opt_check2.v
+
+module opt_check2 (input a, input b , output y);
+
+	assign y = a?1:b;
+	
+endmodule
+
+After simplification,we expect the output y to be an OR gate, since the output of the mux can be simplified to y = a + b. If we generate the netlist and look at its graphical representation , we get
+
+![Capture3](https://user-images.githubusercontent.com/123365828/214546689-b37b6518-b6d6-4537-aa54-feff3d8efff9.PNG)
+
+Note: The synthesis tool instead of OR gates infers a nand gate with inverted inputs based on Demorgan's Law. It is done to avoid stacked PMOS in CMOS implemantation of OR gate.
+
+Example 3: opt_check3.v
+
+module opt_check3 (input a, input b , input c , output y);
+
+	assign y = a?(c?b:0):0;
+	
+endmodule
+
+For the RTL verilog code of opt_check3.v , we expect the output to be a 3 input AND gate based on constant propagation and boolean logic optimisation.The output y can be simplified to y = abc.
+
+Next we generate the netlist and observe its graphical representation after synthesis
+
+![Capture4](https://user-images.githubusercontent.com/123365828/214550431-6c0055d9-d948-4788-bf28-d181cdba7c05.PNG)
+
+Yosys synthesizes a 3 input AND gate as expected because of optimisations.
+
+Example 4:opt_check4.v
+
+module opt_check4 (input a, input b , input c , output y);
+
+	assign y = a?(b?(a & c):c):(!c);
+	
+endmodule
+
+In this case,the boolean logic optimisation simplifies the output to a single xnor gate i.e. y = a xnor c. Next we generate the netlist and observe its graphical representation after synthesis
 
 
 
