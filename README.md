@@ -550,7 +550,7 @@ Thus, q takes the value 0 until the next clock edge when it read an input of 1 f
 
 Since Q takes both logic 0 and 1 values in different clock cycles. It is wrong to say that Q=!(reset) or Q=Q1
 
-Hence, both the flip-flops are retained and no optimisations are performed on this design. We can confirm this using Yosys as shown below.
+As a result, both flip-flops are retained, and this design has no optimizations. Using Yosys, we can verify this as illustrated below.
 
 ![Capture15](https://user-images.githubusercontent.com/123365828/214567999-c97f1a06-b0ca-46f6-bf76-61b6d1d1d90f.PNG)
 
@@ -570,7 +570,7 @@ As the output is always constant, it can easily be optimised using Yosys as show
 
 ![Capture18](https://user-images.githubusercontent.com/123365828/214571342-d60b6791-c4ae-4dc7-acf5-e1496b954788.PNG)
 
-unutilized output optimizations
+unused output optimizations
 
 
 
