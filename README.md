@@ -572,6 +572,37 @@ As the output is always constant, it can easily be optimised using Yosys as show
 
 unused output optimizations
 
+# Day 4: Gate Level Simulations,Blocking vs Non Blocking assignments,Synthesis-Simulation Mismatch
+
+# Introduction to Gate Level Simulations
+
+# Synthesis Simulation Mismatches
+
+# Labs on GLS and Synthesis-Simulation Mismatch
+
+Example 1: A mux designed with the help of ternary operator
+
+module ternary_operator_mux (input i0 , input i1 , input sel , output y);
+
+	assign y = sel?i1:i0;
+	
+endmodule
+
+![Capture1](https://user-images.githubusercontent.com/123365828/214826034-a3fb30fa-4e2f-4266-90b0-6997dde63618.PNG)
+
+iverilog ternary_operator_mux.v tb_ternary_operator_mux.v 
+
+./a.out
+
+gtkwave tb_ternary_operator_mux.vcd 
+
+
+![Capture2](https://user-images.githubusercontent.com/123365828/214826965-799b65c7-ddcd-4af7-9250-08eec785958c.PNG)
+
+
+The synthesized netlist for the above,using yosys
+
+![Capture3](https://user-images.githubusercontent.com/123365828/214828524-8ba5f49c-e389-4c3c-8168-49f17b2926f4.PNG)
 
 
 
