@@ -1145,6 +1145,10 @@ Observation : When sel[1:0]=11, the output neither follows i2 nor i3. It simply 
 
 Whereas while running GLS on the netlist,the waveform of the synthesized netlist behaves as 4X1 mux as shown below
 
+![Capture10](https://user-images.githubusercontent.com/123365828/215098579-0d02086a-e781-4baf-a006-ac9e14ea38ce.PNG)
 
+Thus ,Overlapping cases confuse the simulator and leads to Synthesis-Simulation Mismatches.
+
+# Introduction to Looping Constructs
 
 
