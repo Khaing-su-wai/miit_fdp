@@ -1087,7 +1087,63 @@ Complete Mux along with all the cases specified.
 
 Output follows i2 at default case,if i1 and io go low. Hence a 4X1 mux is synthesized without any latch that can be verified below.
 
-![Capture6](https://user-images.githubusercontent.com/123365828/215090669-8dad2328-6096-4b29-b4f6-fe6d15c728ec.PNG)
+![Capture7](https://user-images.githubusercontent.com/123365828/215091221-df5d1c71-fbd4-450f-a36c-80b2edd893c7.PNG)
+
+Example 5: Partial Assignments
+
+	module partial_case_assign (input i0 , input i1 , input i2 , input [1:0] sel , output reg y , output reg x);
+	always @ (*)
+	begin
+		cae(sel)
+			2'b00: begin
+				y = i0;
+				x = i2;
+				end
+			2'b01: y = i1;
+			default: begin 
+				x = i1;
+				y = i2;
+				end
+		endcase
+	end
+	endmodule
+
+Expected Circuit: The 2X1 mux with output y is inferred without any latch. 
+
+Condition for enabling:
+
+		      en=sel[1]+!(sel[0]) 
+
+Using Redundancy Theorem
+
+Yosys implementation of the above design after synthesis,
+
+![Capture8](https://user-images.githubusercontent.com/123365828/215092117-41921581-d182-430d-853b-104f932387c3.PNG)
+
+As expected, Only 1 D latch is inferred for X. No latch is inferred for y.
+
+Example 6: Design of 4X1 mux having overlapping cases
+
+	module bad_case (input i0 , input i1 , input i2 , input [1:0] sel , output reg y);
+	always @ (*)
+	begin
+		cae(sel)
+			2'b00: y = i0;
+			2'b01: y = i1;
+			2'b10: y = i2;
+			2'b1?: y = i3;
+
+		endcase
+	end
+	endmodule
+
+In gtkwaveform of RTL simulation:
+
+![Capture9](https://user-images.githubusercontent.com/123365828/215093220-91115ce6-5ce8-4cd5-89ea-aa4c2432503e.PNG)
+
+Observation : When sel[1:0]=11, the output neither follows i2 nor i3. It simply latches to 1.
+
+Whereas while running GLS on the netlist,the waveform of the synthesized netlist behaves as 4X1 mux as shown below
 
 
 
