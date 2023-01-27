@@ -2,9 +2,9 @@
 
 # Day1 Content
 
-# Introduction to Verilog RTL design and Synthesis
+## Introduction to Verilog RTL design and Synthesis
 
-# Labs using iverilog and gtkwave
+### Labs using iverilog and gtkwave
 
 mkdir vsd  
  cd vsd  
@@ -20,6 +20,7 @@ mkdir vsd
  cd ..  
  cd ..  
  cd verilog_files  
+ 
  Below screenshot shows the above directory structure inside the vsd upto my_lib directories that was set up through the terminal.
  
  ![image](https://user-images.githubusercontent.com/123365828/214255272-44106959-5909-47ff-bf6e-2610e6dcbac7.png)
@@ -52,7 +53,7 @@ vim tb_good_mux.v -o good_mux.v
 
 ![image](https://user-images.githubusercontent.com/123365828/214257295-be8ae55b-2a01-4a4e-9558-2b25599b8fc7.png)
 
-# Labs using Yosys and Sky130 PDKs
+### Labs using Yosys and Sky130 PDKs
 
 Commands to obtain a synthesized implementation of good_mux design
 
@@ -125,7 +126,7 @@ The library also represents the different features of the cell like its leakage 
  
  ![Capture8](https://user-images.githubusercontent.com/123365828/214306598-1fbaf219-43b4-4f04-98f3-37c021c60e0f.PNG)
 
-# HIERARCHIAL VS FLAT SYNTHESIS
+### HIERARCHIAL VS FLAT SYNTHESIS
 
 While syntheisizing the RTL design in which multiple modules are present, the synthesis can be done in two forms.
 
@@ -159,7 +160,7 @@ We use flatten to generate a flat netlist. Here there are no instances of U1 and
 
 ![Capture15](https://user-images.githubusercontent.com/123365828/214318050-75229e09-433e-4ebe-b348-321add3962ef.PNG)
 
-# SUB MODULE LEVEL SYNTHESIS AND ITS NECESSITY
+### SUB MODULE LEVEL SYNTHESIS AND ITS NECESSITY
 
 Hence we control the model that we are synthesizing using the keywords
 
@@ -175,7 +176,7 @@ synth -top sub_module1
 
 Notice ,In the synthesis report,it inferring only 1 AND gate.
 
-# Asynchoronous and Synchronous resets
+### Asynchoronous and Synchronous resets
 
 Verilog codes of asynchronous reset and set :
 
@@ -223,7 +224,7 @@ Synthesis results:
 ![Capture25](https://user-images.githubusercontent.com/123365828/214500040-ace712d4-73c4-4ab0-b8c4-bce2c4d596ce.PNG)
 
 
-# OPTIMISATIONS
+### OPTIMISATIONS
 
 We now observe some Interesting Optimisations For Special Cases :
 
@@ -265,7 +266,7 @@ On synthesizing the netlist and look at it's graphical realisation , we will see
 
 # DAY 3 : Combinational and Sequential Optimisations
 
-# Introduction to Logic optimisations
+## Introduction to Logic optimisations
 
 The simulator performs multiple types of optimization techniques on the combinational and sequential circuits in order to provide a digital circuit design that is optimized in terms of area and power.
 
@@ -299,7 +300,7 @@ The simulator performs multiple types of optimization techniques on the combinat
 
 -Sequential Logic Cloning (Floor Plan Aware Synthesis)
 
-# Combinational Logic Optimisations
+### Combinational Logic Optimisations
 
 To understand each of the above mentioned combinational optimizations through different RTL code examples, also check the synthesis implementation through yosys to understand how the optimisations take place.
 
@@ -426,7 +427,7 @@ On boolean optimisation, we obtain y=1 simply. It's synthesis yields:
 
 ![Capture9](https://user-images.githubusercontent.com/123365828/214556931-fdeb4e66-00a9-4cfb-a60c-3ee683c84d9e.PNG)
 
-# Sequential Logic Optimisations
+### Sequential Logic Optimisations
 
 We will use many RTL code examples to try to understand each sequential optimization. To further understand how the optimizations are carried out, we additionally check the synthesis implementation for each example using yosys.
 
@@ -574,7 +575,7 @@ unused output optimizations
 
 # Day 4: Gate Level Simulations,Blocking vs Non Blocking assignments,Synthesis-Simulation Mismatch
 
-# Introduction to Gate Level Simulations
+## Introduction to Gate Level Simulations
 
 We apply netlist to the test bench as desh under test while using GLS. In terms of the standard cells provided in the library, what we accomplished at the behavioral level in the RTL code was translated to the net list. Net list and RTL code are therefore equivalent logically. Since their inputs and outputs are identical, the netlist should fit exactly where the RTL code should have been. We replace the RTL file with the netlist and launch the simulation using the test bench.
 
@@ -585,12 +586,12 @@ The hold and setup times, which are crucial for a circuit, are not included in s
 When utilizing GLS with Iverilog Flow, the design is a netlist that is provided to the Iverilog simulator in terms of the library's standard cells. The same type of cell is accessible in the library in a variety of flavors. The GATE level verilog models are also provided as input to enable the simulator to comprehend the specification of the various annotations of the cell. We can utilize the GLS for timing validation if the GATE level models are time aware (delay annotated).
 
 	
-# Synthesis Simulation Mismatches
+### Synthesis Simulation Mismatches
 
 	-	Missing sensitivity list
 	-	Blocking and non blocking statements
 	
-# Missing sensitivity list
+### Missing sensitivity list
 
 Simulator functions on the basis of activity that is it looks for if either of the inputs change. If there is no change in the inputs the simulator won't evaluate the output at all.
 
@@ -599,53 +600,83 @@ Example:
 module mux(input i0, input i1, input sel, output reg y);
 
 always @(sel)
+
 begin
+
 	if (sel)
+	
 	begin
+	
 		y = i1;
+		
 	end
+	
 	else
+	
 	begin
+	
 		y = i0;
+		
 	end
+	
 end
+
 endmodule
 
 This mux code has a fault in that simulation only occurs while select is high, which means that if select is slow and there are changes in i0 or i1, they are completely ignored. Therefore, for the simulator, this mark is equivalent to a latch or a double H block, but the synthesizer constructs a mux based on functionality rather than sensitivity. 
 
-Blocking and non blocking statements Inside always block
+### Blocking and non blocking statements Inside always block
 
-Blocking Executes the statements in the order it is written So the first statement is evaluated before the second statement
-Non Blocking Executes all the RHS when always block is entered and assigns to LHS. Parallel evaluation
-Example of Blocking assignments:
+	-	Blocking Executes the statements in the order it is written So the first statement is evaluated before the second statement
+	-	Non Blocking Executes all the RHS when always block is entered and assigns to LHS. Parallel evaluation
+	
+### Example of Blocking assignments:
 
 module shift_register(input clk, input reset, input d, output reg q1);
+
 reg q0;
 
 always @(posedge clk,posedge reset)
+
 begin
 	if(reset)
+	
 	begin
+	
 		q0 = 1'b0;
+		
 		q1 = 1'b0;
+		
 	end
+	
 	else
+	
 	begin
+	
 		q0 = d;
+		
 		q1 = q0;
+		
 	end
+	
 end
+
 endmodule
+
 In this case, D is assigned to Qo not which is then assigned to Q. Due to optimisation a single latch is formed where Q is equal to D.
 
-Example of Non-Blocking assignments:
+### Example of Non-Blocking assignments:
 
 In the above RTL code if
 
       begin
+      
 		q0 <= d;
+		
 		q1 <= q0;
+		
       end
+      
 In the non blocking assignments all the RHS are evaluated and parallel assigned to lhs irrespective of the order in which they appear. So we will always get a two flop shift register.
 
 Therefore we always use non blocking statements for writing sequential circuits.
@@ -653,13 +684,19 @@ Therefore we always use non blocking statements for writing sequential circuits.
 Other example:
 
 module comblogic(input a, input b, input c, output reg y);
+
 reg q0;
 
 always @(*)
+
 begin
+
 	y = q0 & c;
+	
 	q0 = a|b;
+	
 end
+
 endmodule
 
 Whenever any of the inputs, A, B, or C, changes, we enter the loop, but because Y is assigned the old Qo value because it is utilizing the value of the previous Tclk, the simulator imitates a delay or flop. On the other hand, the OR and AND gates are visible during synthesis as predicted.
@@ -697,7 +734,7 @@ To invoke GLS,
 
 We need to read our netlist file and the test bench file assosciated with it.
 
-We need to read 2 extra files that contain the description of verilog models in the netlist.
+We need to read two extra files that contain the description of verilog models in the netlist.
 
 iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v ternary_operator_mux_net.v tb_ternary_operator_mux.v
 
@@ -775,13 +812,13 @@ We enter into the loop whenever any of the inputs a b or C changes but D is assi
 
 ![Capture10](https://user-images.githubusercontent.com/123365828/214833646-baf40924-1a6e-4338-bd46-25a7e8c4577b.PNG)
 
-At the instance where both the inputs a and b are 0. a | b should output 0, which when ANDed with c, should give an output y of 0. The output y thus should hold the value 0. Instead,it holds the value 1 . But due to the blocking statements in the rtl code, x actually holds a the value of a OR b from the previous clock, hence giving us an incorrect output.
+a | b should produce 0 when both inputs a and b are 0, which, when ANDed with c, should produce an output y of 0. Thus, the output y ought to have the number 0. It currently has the value 1, though. However, x really holds the value of an OR b from the preceding clock because to the blocking statements in the rtl function, giving us an inaccurate output.
 
 The netlist representation on synthesis yields
 
 ![Capture11](https://user-images.githubusercontent.com/123365828/214834249-b0a9c473-6365-4642-896f-112dc877a3da.PNG)
 
-The synthesizer does not see the sensitivity list rather the functionality of the RTL design.Hence,the netlist representation does not include any latches to hold delayed values pertaining to the previous cycle. It only includes an OR 2 AND gate.
+The RTL design's functionality is what the synthesizer sees instead of the sensitivity list. As a result, there are no latches in the netlist representation to store delayed values from the preceding cycle. There is simply an OR 2 AND gate present.
 
 iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v blocking_caveat_net.v tb_blocking_caveat.v
 
@@ -793,10 +830,8 @@ If we run gate level simulations on this netlist in verilog, we observe the foll
 
 ![Capture12](https://user-images.githubusercontent.com/123365828/214835929-17f94b84-32d6-47a2-ac4f-b106f2d2573a.PNG)
 
-Here , we observe that the circuit behaves as intended combinational ckt. Output d results from the present value of inputs, and not the previous clock values like in the simulation results. Since the waveforms of the stimulated RTL verilog code do not match with the gate level simulation of generated netlist,we get a Synthesis-Simulation Mismatch again.
 
-
-
+Here, we can see that the circuit operates as intended combinational ckt. In contrast to the simulation results, output d is produced using the current value of the inputs rather than the past clock values. We experience a Synthesis-Simulation Mismatch once more because the waveforms of the stimulated RTL verilog code do not match the gate level simulation of the generated netlist.
 
 
 
