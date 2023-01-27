@@ -576,7 +576,95 @@ unused output optimizations
 
 # Introduction to Gate Level Simulations
 
+We apply netlist to the test bench as desh under test while using GLS. In terms of the standard cells provided in the library, what we accomplished at the behavioral level in the RTL code was translated to the net list. Net list and RTL code are therefore equivalent logically. Since their inputs and outputs are identical, the netlist should fit exactly where the RTL code should have been. We replace the RTL file with the netlist and launch the simulation using the test bench.
+
+The hold and setup times, which are crucial for a circuit, are not included in simulations carried out with the aid of RTL code. There are other cell flavors in the library that satisfy this setup and hold time requirement.
+
+![image](https://user-images.githubusercontent.com/123365828/215011051-6f614ad6-0ee2-43f6-a2be-ea7178f319be.png)
+
+When utilizing GLS with Iverilog Flow, the design is a netlist that is provided to the Iverilog simulator in terms of the library's standard cells. The same type of cell is accessible in the library in a variety of flavors. The GATE level verilog models are also provided as input to enable the simulator to comprehend the specification of the various annotations of the cell. We can utilize the GLS for timing validation if the GATE level models are time aware (delay annotated).
+
+	
 # Synthesis Simulation Mismatches
+
+	-	Missing sensitivity list
+	-	Blocking and non blocking statements
+	
+# Missing sensitivity list
+
+Simulator functions on the basis of activity that is it looks for if either of the inputs change. If there is no change in the inputs the simulator won't evaluate the output at all.
+
+Example:
+
+module mux(input i0, input i1, input sel, output reg y);
+
+always @(sel)
+begin
+	if (sel)
+	begin
+		y = i1;
+	end
+	else
+	begin
+		y = i0;
+	end
+end
+endmodule
+
+This mux code has a fault in that simulation only occurs while select is high, which means that if select is slow and there are changes in i0 or i1, they are completely ignored. Therefore, for the simulator, this mark is equivalent to a latch or a double H block, but the synthesizer constructs a mux based on functionality rather than sensitivity. 
+
+Blocking and non blocking statements Inside always block
+
+Blocking Executes the statements in the order it is written So the first statement is evaluated before the second statement
+Non Blocking Executes all the RHS when always block is entered and assigns to LHS. Parallel evaluation
+Example of Blocking assignments:
+
+module shift_register(input clk, input reset, input d, output reg q1);
+reg q0;
+
+always @(posedge clk,posedge reset)
+begin
+	if(reset)
+	begin
+		q0 = 1'b0;
+		q1 = 1'b0;
+	end
+	else
+	begin
+		q0 = d;
+		q1 = q0;
+	end
+end
+endmodule
+In this case, D is assigned to Qo not which is then assigned to Q. Due to optimisation a single latch is formed where Q is equal to D.
+
+Example of Non-Blocking assignments:
+
+In the above RTL code if
+
+      begin
+		q0 <= d;
+		q1 <= q0;
+      end
+In the non blocking assignments all the RHS are evaluated and parallel assigned to lhs irrespective of the order in which they appear. So we will always get a two flop shift register.
+
+Therefore we always use non blocking statements for writing sequential circuits.
+
+Other example:
+
+module comblogic(input a, input b, input c, output reg y);
+reg q0;
+
+always @(*)
+begin
+	y = q0 & c;
+	q0 = a|b;
+end
+endmodule
+
+Whenever any of the inputs, A, B, or C, changes, we enter the loop, but because Y is assigned the old Qo value because it is utilizing the value of the previous Tclk, the simulator imitates a delay or flop. On the other hand, the OR and AND gates are visible during synthesis as predicted.
+
+Because of this, we should evaluate Q0 before evaluating Y when utilizing blocking statements in this scenario so that Y takes on the updated values of Qo. Even though both synthesised circuits produce the identical digital circuit made up of AND and OR gates. However, when we simulate, we see distinct behaviors.
 
 # Labs on GLS and Synthesis-Simulation Mismatch
 
@@ -587,6 +675,7 @@ module ternary_operator_mux (input i0 , input i1 , input sel , output y);
 	assign y = sel?i1:i0;
 	
 endmodule
+
 
 ![Capture1](https://user-images.githubusercontent.com/123365828/214826034-a3fb30fa-4e2f-4266-90b0-6997dde63618.PNG)
 
