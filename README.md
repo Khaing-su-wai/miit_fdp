@@ -896,7 +896,7 @@ Note:
 If, case statements are used inside always block.
 In verilog whatever variable we use to assign in if or case statements must be a register variable.
 
-## CASE Constructs
+### CASE Constructs
 
 Let's look at the following verilog code block. Here, the inferred hardware should be a 4:1 multiplexer. The CASE statements do not have priority logic like IF statements.
 
@@ -921,7 +921,7 @@ Depending on the cases matching the select y is assigned accordingly.
 
 Some caveats with using CASE statements:
 
-## 1.Incomplete CASE
+### 1.Incomplete CASE
 
 Let's say I have a two bit variable select.
 
@@ -959,7 +959,7 @@ Solution is code case with default inside the CASE block so that the tool knows 
 	    end case
 	    end
 	    
-## 2.Partial assignments
+### 2.Partial assignments
 
 	always @(*)
 	begin
@@ -999,7 +999,7 @@ In the above example, we have 2 outputs x and y. This will create two 4X1 multip
 In the above code block ,2'b1? specifies that the corresponding bit can be either be 0 or 1. This means when the sel input is holding a value 3 i.e 2'b11, cases 3 and 4 both hold true. What is synthesized depends on the mercy of the simulator. It can lead to Synthesis-Simulation mismatches.
 If we used an IF condition here, due to priority logic, condition 4 would be ignored when condition 3 is met. However,in the CASE statement , even if the upper case is matched,all the cases are checked.So,if there is overlapping in cases,it poses a problem as the cases are not mutually exclusive. And we would get an unpredictable output.
 
-## Labs on Incorrect IF and CASE constructs
+### Labs on Incorrect IF and CASE constructs
 
 Example 1: Incomplete If statements
 
@@ -1149,7 +1149,7 @@ Whereas while running GLS on the netlist,the waveform of the synthesized netlist
 
 Thus ,Overlapping cases confuse the simulator and leads to Synthesis-Simulation Mismatches.
 
-## Introduction to Looping Constructs
+### Introduction to Looping Constructs
 
 There are two types of FOR loops in verilog.
 
