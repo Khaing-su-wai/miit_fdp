@@ -978,7 +978,7 @@ Solution is code case with default inside the CASE block so that the tool knows 
 	
 In the above example, we have 2 outputs x and y. This will create two 4X1 multiplexers with the respective outputs. If we look at case 2'b01, we have specified the value of x for this case ,but not the value of y. It appears that it is okay to do so, as a default case is specified for both the outputs, and if we don't directly specify the value of y for any case, the simulator will implement the default case. This, however , is incorrect. In partial assignments such as this, the simulator will infer a latch at the 2nd input for multiplexer y as no value is specified for a particular case.
 
-	## 3.Overlapping cases
+### 3.Overlapping cases
 
 	always @(*)
 	begin
