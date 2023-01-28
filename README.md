@@ -1287,6 +1287,8 @@ the resulting gtkwaveform is shown below that shows an adder being simulated:
 
 
 Acknowledgment:
+
 1.Kunal Ghosh - Co-founder(Vsd corp. pvt.ltd.)
+
 2.Shon Taware
 
