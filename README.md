@@ -1292,3 +1292,75 @@ Acknowledgment:
 
 2.Shon Taware
 
+#  Day 6 Content
+
+#  Introduction to FPGA Programming
+
+## Counter
+
+### Simulation Result
+
+![image](https://user-images.githubusercontent.com/123365828/215696478-69e282e3-4c70-4a26-81ee-e7b76d9086e1.png)
+
+![image](https://user-images.githubusercontent.com/123365828/215696554-db0acbaa-8d8e-46c9-9ff4-0ec58e59407e.png)
+
+### RTL Schematic Design
+
+![image](https://user-images.githubusercontent.com/123365828/215696951-b4901b9d-51ee-4f8e-bb24-0a24aa20a6cb.png)
+
+### Synthesis Design:
+
+![image](https://user-images.githubusercontent.com/123365828/215697096-4389392b-df00-467f-baf9-3b79a3c3b0c2.png)
+
+![image](https://user-images.githubusercontent.com/123365828/215697140-b8f97853-4e46-4fd3-b597-b80302e1c904.png)
+
+### Constraints
+
+![image](https://user-images.githubusercontent.com/123365828/215697259-6e67ab94-19a1-4541-97d7-b29fe9d15673.png)
+
+
+### Report Timming Summary
+
+### Constraints are met
+
+![image](https://user-images.githubusercontent.com/123365828/215697600-d7ef1c0a-2813-46de-ae4b-cd1f2e1e1803.png)
+
+### Report Utilization
+
+![image](https://user-images.githubusercontent.com/123365828/215698198-ef4bc6ee-be16-44e8-9642-1365a29ec6ea.png)
+
+### Mapping 
+
+![image](https://user-images.githubusercontent.com/123365828/215698327-125a3167-495d-4b0c-bd21-9cb1097a79e4.png)
+
+### Generate Bit Stream and write to target device (Bassys 3 Board)
+
+![image](https://user-images.githubusercontent.com/123365828/215698878-db19dd3a-da3b-4064-958b-30c71f41e632.png)
+
+![image](https://user-images.githubusercontent.com/123365828/215698938-2891d59a-1ec3-4976-a663-840063527c9c.png)
+
+# warning: The debug hub core was not detected at User Scan Chain 1 or 3.
+
+### VIO
+
+![image](https://user-images.githubusercontent.com/123365828/215699521-339089f3-2c62-45dd-9439-875709f45891.png)
+
+![image](https://user-images.githubusercontent.com/123365828/215699777-c4da3914-1de6-40b7-85d2-aea212fe7b2f.png)
+
+### Error
+
+![image](https://user-images.githubusercontent.com/123365828/215699864-f81fa69c-2a71-4b34-b7e3-814e59eacc2b.png)
+
+![image](https://user-images.githubusercontent.com/123365828/215699953-b4f0865f-351a-43f0-8aee-b37dab6ad3ef.png)
+
+
+
+
+
+
+
+
+
+
+
+
