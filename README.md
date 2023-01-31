@@ -1339,15 +1339,15 @@ Acknowledgment:
 
 ![image](https://user-images.githubusercontent.com/123365828/215698938-2891d59a-1ec3-4976-a663-840063527c9c.png)
 
-# warning: The debug hub core was not detected at User Scan Chain 1 or 3.
+#### warning: The debug hub core was not detected at User Scan Chain 1 or 3.
 
-### VIO
+## VIO
 
 ![image](https://user-images.githubusercontent.com/123365828/215699521-339089f3-2c62-45dd-9439-875709f45891.png)
 
 ![image](https://user-images.githubusercontent.com/123365828/215699777-c4da3914-1de6-40b7-85d2-aea212fe7b2f.png)
 
-### Error
+#### Error
 
 ![image](https://user-images.githubusercontent.com/123365828/215699864-f81fa69c-2a71-4b34-b7e3-814e59eacc2b.png)
 
