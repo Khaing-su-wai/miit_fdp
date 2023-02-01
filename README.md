@@ -1353,8 +1353,35 @@ Acknowledgment:
 
 ![image](https://user-images.githubusercontent.com/123365828/215699953-b4f0865f-351a-43f0-8aee-b37dab6ad3ef.png)
 
+# Day 7
+
+## Openlane
+
+OpenLANE is an automated RTL to GDSII flow based on several components including OpenROAD, Yosys, Magic, Netgen, Fault and custom methodology scripts for design exploration and optimization. The flow performs full ASIC implementation steps from RTL all the way down to GDSII - this capability will be released in the coming weeks with completed SoC design examples that have been sent to SkyWater for fabricaiton.
+
+### Setting up OpenLANE
+
+	git clone git@github.com:efabless/openlane --branch rc2
+	    cd openlane/docker_build
+	    make merge
+	    cd ..
+
+![Capture1](https://user-images.githubusercontent.com/123365828/215960001-34c49b1b-1efc-43aa-aeb5-d12013109362.PNG)
 
 
+### Running OpenLANE
+
+Issue the following command to open the docker container from path/to/openlane to ensure that the output files persist after exiting the container:
+
+	   docker run -it -v $(pwd):/openLANE_flow -v $PDK_ROOT:$PDK_ROOT -e PDK_ROOT=$PDK_ROOT -u $(id -u $USER):$(id -g $USER) openlane:rc2
+	   
+Note: this will mount the openlane directory inside the container.
+
+Use the following example to check the overall setup:
+
+	./flow.tcl -design spm
+	
+To run OpenLANE on multiple designs at the same time, check this section.
 
 
 
