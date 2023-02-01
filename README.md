@@ -1435,7 +1435,7 @@ In this process, we place the gate level netlist on the floor planning rows, all
 	- Global placement
 	- Detailed placement
 	
-	![image](https://user-images.githubusercontent.com/123365828/216031585-6153fddf-a02d-4761-bf0f-dfbf05dcf6d3.png)
+![image](https://user-images.githubusercontent.com/123365828/216048219-c58a0535-c300-46c3-aa99-e1ef431ed905.png)
 	
 ### Global placement
 
@@ -1529,17 +1529,15 @@ To address this issue, we have to limit the lenght of the wire. usually this is 
 	- Bridging attaches a higher layer intermediary
 	- Add antenna diode cell to leak away charges.(Antenna diodes are provided by the SCL)
 	
-![image](https://user-images.githubusercontent.com/123365828/216047361-4c3d80ed-828f-467d-b14b-8d2be0bc386e.png)
 
 ![image](https://user-images.githubusercontent.com/123365828/216047461-f90b1d7b-61e6-450a-ae4b-5afe3f12bd50.png)
 
-	
-With OpenLANE, we took a preventive approach. here we add fake antenna diode next to every cell input after placement. Then run the Antenna checker on the routed layout. If the checker reports a violation on cell input pin, replace the fake diode cell by a real one.
-
 ![image](https://user-images.githubusercontent.com/123365828/216047418-be58c8a9-c52f-4165-b2b0-3c807b865dc2.png)
 
+With OpenLANE, we took a preventive approach. here we add fake antenna diode next to every cell input after placement. Then run the Antenna checker on the routed layout. If the checker reports a violation on cell input pin, replace the fake diode cell by a real one.
 
-### Static Timing analysis(STA)
+
+![image](https://user-images.githubusercontent.com/123365828/216047361-4c3d80ed-828f-467d-b14b-8d2be0bc386e.png)### Static Timing analysis(STA)
 
 It involves the interconnect RC Extraction(DEF2SPEF) from the routed layout, followed by STA on OpenSTA(OpenROAD) tool. resulting report will shows the timing violations if any violations is there.
 
