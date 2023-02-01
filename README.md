@@ -1373,17 +1373,22 @@ OpenLANE is an automated RTL to GDSII flow based on several components including
 
 Issue the following command to open the docker container from path/to/openlane to ensure that the output files persist after exiting the container:
 
-	   docker run -it -v $(pwd):/openLANE_flow -v $PDK_ROOT:$PDK_ROOT -e PDK_ROOT=$PDK_ROOT -u $(id -u $USER):$(id -g $USER) openlane:rc2
+	   docker 
 	   
 Note: this will mount the openlane directory inside the container.
 
 Use the following example to check the overall setup:
 
-	./flow.tcl -design spm
+	./flow.tcl -interactive
 	
 To run OpenLANE on multiple designs at the same time, check this section.
 
+![Capture2](https://user-images.githubusercontent.com/123365828/215973686-5c3da5fc-4933-4588-af7c-498454fd44ed.PNG)
 
+
+### Adding a design
+
+![Capture3](https://user-images.githubusercontent.com/123365828/215974771-d9d04de3-688e-4ce3-90bf-5294dc3c30bb.PNG)
 
 
 
