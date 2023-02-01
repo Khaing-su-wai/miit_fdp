@@ -1355,46 +1355,89 @@ Acknowledgment:
 
 # Day 7
 
-## Openlane
+## Inception of open-source EDA, OpenLANE and sky130 PDK
+
+## How to design Digital ASIC?
+
+To design Digital ASIC, few tools or things which are required from the day one. These are
+
+	-RTL Design
+	-EDA tools
+	-PDK data
+	
+what is RTL design?
+
+In digital circuit design, register-transfer level (RTL) is a design abstraction which models a synchronous digital circuit in terms of the flow of digital signals (data) between hardware registers, and the logical operations performed on those signals.for this designs many open sorces are available. like, librecores.org, opencores.org, github.com, etc...
+
+What is EDA tools?
+
+The term Electronic Design Automation (EDA) refers to the tools that are used to design and verify integrated circuits (ICs), printed circuit boards (PCBs), and electronic systems, in general. many open sorces tools are available like Qflow, OpenROAD, OpenLANE, etc...
+
+What is PDK Data?
+
+PDK is process design kit. It is interface between FAB and design. This data is collections of files like,
+
+	-process design rules: DRC, LVS, REX
+	-Digital standerd cell libreries
+	-i/o librerirs
+	-etc.....
+	
+which are used to model a fabrication process for the EDA tools used to design an ICs. for example, in 2020, google release the open source PDK for FOSS 130nm production with the skywater technology. But right now it is at cutting age of the 5 nm also. But in many applications, the advance node is not required, and the cost of advanced node is also high as compared to 130nm processors. This 130nm processors are also fast processor. for example,
+
+intel: P4EE @3.46 GHz(Q4'o4)
+
+sky130_OSU (single cycle RV32i CPU) pipeline version can achieve more than 1 GHz clock
+
+## Simplified RTL to GDSII flow
+
+### Floor planning and Power planning
+
+The main objective here is that to plan silicon area and distribute the power to the whole circuit. In the chip floor planning, the partition chip die between different system building blocks and place the i/o pads. In micro floor planning, we define the dimensions, pin locations, rows.
+
+![image](https://user-images.githubusercontent.com/123365828/216031368-52b4e3e3-cd29-47a5-9904-65d5d11d071b.png)
+
+### Placement
+
+In this process, we place the gate level netlist on the floor planning rows, alligned with the sites. cells should be placed very closed to eachother to reduce the interconnnect delay. Usually placement is done in 2 steps:
+
+	- Global placement
+	- Detailed placement
+	
+	![image](https://user-images.githubusercontent.com/123365828/216031585-6153fddf-a02d-4761-bf0f-dfbf05dcf6d3.png)
+
+## Introduction to Openlane
 
 OpenLANE is an automated RTL to GDSII flow based on several components including OpenROAD, Yosys, Magic, Netgen, Fault and custom methodology scripts for design exploration and optimization. The flow performs full ASIC implementation steps from RTL all the way down to GDSII - this capability will be released in the coming weeks with completed SoC design examples that have been sent to SkyWater for fabricaiton.
-
-### Setting up OpenLANE
-
-	git clone git@github.com:efabless/openlane --branch rc2
-	    cd openlane/docker_build
-	    make merge
-	    cd ..
-
-![Capture1](https://user-images.githubusercontent.com/123365828/215960001-34c49b1b-1efc-43aa-aeb5-d12013109362.PNG)
-
-
-### Running OpenLANE
-
-Issue the following command to open the docker container from path/to/openlane to ensure that the output files persist after exiting the container:
-
-	   docker 
-	   
-Note: this will mount the openlane directory inside the container.
-
-Use the following example to check the overall setup:
-
-	./flow.tcl -interactive
-	
-To run OpenLANE on multiple designs at the same time, check this section.
-
-![Capture2](https://user-images.githubusercontent.com/123365828/215973686-5c3da5fc-4933-4588-af7c-498454fd44ed.PNG)
-
-
-### Adding a design
 
 ### OpenLANE Architecture
 
 ![image](https://user-images.githubusercontent.com/123365828/215985039-63ee7157-ff08-456a-95c1-ec70c6f66458.png)
 
-### OpenLANE Design Stages
+### DFT(Design for Test)
 
-![Capture3](https://user-images.githubusercontent.com/123365828/215974771-d9d04de3-688e-4ce3-90bf-5294dc3c30bb.PNG)
+it perform scan inserption, automatic test pattern generation, Test patterns compaction, Fault coverage, Fault
+
+![image](https://user-images.githubusercontent.com/123365828/216032080-bd3ca425-a6fb-42a3-8b5e-cd17d620003d.png)
+
+After that physical implementation is done by OpenROAD app. physical implementation involves the several steps:
+
+	- Floor/Power Planning
+	- End Decoupling Capacitors and Tap cells insertion
+	- Placements: Global and Detailed
+	- Post Placement Optimization
+	- Clock Tree synthesis (CTS)
+	- Routing: Global and Detailed
+	
+
+### Static Timing analysis(STA)
+
+It involves the interconnect RC Extraction(DEF2SPEF) from the routed layout, followed by STA on OpenSTA(OpenROAD) tool. resulting report will shows the timing violations if any violations is there.
+
+### Physical Verification (DRC and LVS)
+
+Magic is used for design Rules checking and SPICE Extraction from Layout. Magic and Netgen are used for LVS.
+
+### OpenLANE Design Stages
 
 OpenLANE flow consists of several stages. By default all flow steps are run in sequence. Each stage may consist of multiple sub-stages. OpenLANE can also be run interactively which will be shown below.
 
@@ -1463,19 +1506,87 @@ Then, you should be able to run the following commands:
 Any tcl command.
 	
 prep -design <design> -tag <tag> -config <config> -init_design_config -overwrite similar to the command line arguments, design is required and the rest is optional
-run_synthesis
-run_floorplan
-run_placement
-run_cts
-run_routing
-run_magic
-run_magic_spice_export
-run_magic_drc
-run_netgen
-run_magic_antenna_check
+	
+	run_synthesis
+	run_floorplan
+	run_placement
+	run_cts
+	run_routing
+	run_magic
+	run_magic_spice_export
+	run_magic_drc
+	run_netgen
+	run_magic_antenna_check
+	
 The above commands can also be written in a file and passed to flow.tcl:
 
 	./flow.tcl -interactive -file <file>
 	
+
+### Open source EDA tools
+
+OpenLANE Directory Structure in detail
+
+cd command
+
+cd means change directory. this command will help us to go inside the directory.
+
+ls command
+
+ls means listing the directory. It is used to find the list of total details of directory.
+
+ls --ltr
+
+This command will help to list the details in cronological order.
+
+Here we are working in Sky130_fd_sc_hd PDK varient. where, "sky130" is process name or node name."fd" is a foundary name (skyWater foundary)."sc" means standerd cell librery files and the last one "hd" stands for high density(basically one type of varient).
+
+Sky130_fd_sc_hd varient contains many technology files like verilog, spice, techlef, meglef,mag,gds,cdl,lib,lef,etc. (techlef file contains the layer information).
+
+### Design Preparation Step
+
+Running OpenLANE
+
+Issue the following command to open the docker container from path/to/openlane to ensure that the output files persist after exiting the container:
+
+	   docker 
+	   
+Note: this will mount the openlane directory inside the container.
+
+Use the following example to check the overall setup:
+
+	./flow.tcl -interactive
+	
+when we enter in the OpenLANE, we have to use flow.tcl because as a name says, it will goes with the flow using the script. And by using interactive switch, we will do step by step process. without interactive switch, it will run complete flow from RTL to GDSII. Now OpenLANE is open and we can see that prompt will change now.
+
+![Capture1](https://user-images.githubusercontent.com/123365828/216033256-e988a1ed-0b38-4e7a-a7a3-c0f3e7350f61.PNG)
+	
+	Now we have to input all the packages which required to run the flow.
+	
+![Capture1](https://user-images.githubusercontent.com/123365828/216034929-5540102e-6935-49fe-b04e-4ffe827aaa21.PNG)
+	
+Now, here we are ready to execute the command.
+
+Now, if we are going into the design folder in openlane, there are nearly 30-40 designs are already builted. Out of them we can open any of the design. for example, here we are opening the picorv32a.v design. In this design we can see many files are available. i.e., scr, config.tcl, etc. This config.tlc file contains every details about the design. for example, details about enrollment, clock period, clock period port etc.
+
+![Capture3](https://user-images.githubusercontent.com/123365828/216035192-eebed710-14f9-4608-82a4-09d7879c0983.PNG)
+
+Here we can see that the time period is set to the 5.00 nsec. but is we see in the openlane sky130_fd_sc_hd folder, the period is set about 24 nsec. so it is not override to the main file. If it override then give first priority to the main folder.
+	
+![Capture4](https://user-images.githubusercontent.com/123365828/216035349-c34c969d-de55-48e0-9502-e57b98f35060.PNG)
+
+Now, in openlane, we are going to run the synthesis, but before synthesis, we have to prepare design setup stage. for that command is " prep -design picorv32a".
+	
+![Capture2](https://user-images.githubusercontent.com/123365828/216035511-30977613-f845-4189-a75b-80b99e2c5061.PNG)
+
+so, here it is shown that preparation is completed.
+
+### Review after design preparation and run synthesis
+	
+After completing the preparation, in the picorv32a file, the run terictory is created. Inside the folder, Today's date is created. so in this terictory some folders are available which is required for openlane.
+
+	
+
+
 
 
