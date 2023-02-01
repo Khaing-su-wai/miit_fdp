@@ -1585,6 +1585,51 @@ so, here it is shown that preparation is completed.
 	
 After completing the preparation, in the picorv32a file, the run terictory is created. Inside the folder, Today's date is created. so in this terictory some folders are available which is required for openlane.
 
+![Capture6](https://user-images.githubusercontent.com/123365828/216036303-b4854a28-17ad-4c22-82c1-68adfa94f76e.PNG)
+	
+In the temp file, merged.lef file is available which was created in preparation time. if we open this merged.lef file, we get all the wire or layer level and cell level information.
+
+![Capture7](https://user-images.githubusercontent.com/123365828/216036466-6791a7e1-7679-4b8c-a930-42b83f286393.PNG)
+	
+![Capture8](https://user-images.githubusercontent.com/123365828/216036569-c5458461-be74-4bdb-a1c3-98d6ee9142e9.PNG)
+	
+While, in the result folder is empty because till we have not run anything and in the report folder all the folders are there about synthesis, placement, floorplanning,cts,routing,magic,lvs.
+	
+![Capture9](https://user-images.githubusercontent.com/123365828/216036704-8ee82557-b9aa-4d5a-9b36-bcfb61848541.PNG)
+	
+now here also one config.tcl file is available similar like design folder. But this config.tcl file contains all default parameter taken by the run.
+
+![Capture10](https://user-images.githubusercontent.com/123365828/216036885-44363a32-317e-4c95-879e-0231e73988cb.PNG)
+
+when we make some change in the origional configuration and then we run, for example if we make a change in core utilization in the floorplanning and then we run the floorplanning, at this time in the congig.tcl file, the core utility will change and by cross checking it we can check that the modification is reflected in the exicution or not.
+
+Now, cmds.log file takes all the record of the commands, what we have fab.
+	
+![Capture11](https://user-images.githubusercontent.com/123365828/216037000-ca3575ba-12ac-4eef-ba0f-5a64b2fd4d50.PNG)
+
+Now coming to the openlane, we are going to run the synthesis. It will take some 3-4 mnts to run the synthesis and finally synthesis will complited.
+
+![Capture12](https://user-images.githubusercontent.com/123365828/216037107-e992c076-e669-4d22-9bc8-f80bff2c7f52.PNG)
+
+From the data of synthesis, total number of counter D_flip-flops is 1613. and the number of cells is 14876.
+
+![Capture13](https://user-images.githubusercontent.com/123365828/216037904-572e1de7-8ee3-4eae-b775-33a12c857ab2.PNG)
+
+So, the flop ratio = (number of flip flops)/(number of total cell).
+
+So, the flop ratio is 10.84%.
+
+Before run, we saw that the result folder is empty. but now, after running the synthesis, we can see that all the mapping have been done by ABC.
+
+![Capture14](https://user-images.githubusercontent.com/123365828/216038091-ce7afa21-2dde-4018-9ba0-25f9ac8726ea.PNG)
+
+And in the report, we can see when the actual synthesis has done. and the actual statistics synthesis report is showing below, which is same as what we have seen before.
+	
+![Capture15](https://user-images.githubusercontent.com/123365828/216038212-65fa97b7-f9e1-4c7a-8c81-3ad6c9048ffe.PNG)
+
+
+
+
 	
 
 
