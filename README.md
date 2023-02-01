@@ -1404,10 +1404,70 @@ In this process, we place the gate level netlist on the floor planning rows, all
 	- Detailed placement
 	
 	![image](https://user-images.githubusercontent.com/123365828/216031585-6153fddf-a02d-4761-bf0f-dfbf05dcf6d3.png)
+	
+### Global placement
+
+Global placement is very first stage of the placement where cells are placed inside the core area for the first time looking at the timing and congestion. Global Placement aims at generating a rough placement solution that may violate some placement constraints while maintaining a global view of the whole Netlist.
+
+### Detailed placement
+
+In detailed placements, we determined the exact route and layers for each netlist. the objective of detailed placement is valid routing, minimize area and meet timing constrains. Additional objective is minimum via and less power.
+
+### Clock tree synthesis (CTS)
+
+Before routing the signals, we have to route the clock. In the process of clock synthesis, we have distribute the clock to the every sequential elements. for example flipflops, registers, ADC, DAC ete. basically clock netwroks looks likes a tree. where the clock source is roots and the clock elements are end leaves. Synthesization should be done in a manner that with minimum skew and in a good shape.To minimize the clock skew by using the low-skew global routing resources for clock signals.Microsemi devices provide various types of global routing resources that significantly reduce skew.Usually a tree is a H tree, X tree etc.
+
+![image](https://user-images.githubusercontent.com/123365828/216039808-c684af23-b04b-4bc1-9011-f0b552eac943.png)
+
+### Routing
+
+After routing the clock, the signal routing comes. Making physical connections between signal pins using metal layers are called Routing. Routing is the stage after CTS and optimization where exact paths for the interconnection of standard cells and macros and I/O pins are determined. There are two types of nets in VLSI systems that need special attention in routing:
+
+	Clock nets
+	Power/Ground nets
+	
+The sky130 PDK defines the 6 routing leyers. the lowest leyer is called local interconnect layer (titanium nitride layer). Other five layers are alluminium layers.
+
+![image](https://user-images.githubusercontent.com/123365828/216039945-526a9525-3ba9-41be-88e9-be923dce8132.png)
+
+In the proccess of routing, metal trackes forms a routing grids and these grids are huge. so, devide and conquer approach is use for routing. The two types of routing is used:
+
+	- Global routing: Generates the routing guides
+	- Detailed Routing: Uses the routing guides to implement the actual wiring
+	
+### Sign off
+
+Once the routing is done, we can construct the final layout. This final layout will goes under the verification. Two types of verifications are there:
+
+	- Physical verification: Here design rule checking will done and it will check the final layout and owners layout
+	- Timing Verification: Here Static Timing Analysis will done
+
 
 ## Introduction to Openlane
 
-OpenLANE is an automated RTL to GDSII flow based on several components including OpenROAD, Yosys, Magic, Netgen, Fault and custom methodology scripts for design exploration and optimization. The flow performs full ASIC implementation steps from RTL all the way down to GDSII - this capability will be released in the coming weeks with completed SoC design examples that have been sent to SkyWater for fabricaiton.
+OpenLANE is an automated RTL to GDSII flow based on several components including OpenROAD, Yosys, Magic, Netgen, Fault and custom methodology scripts for design exploration and optimization. The flow performs full ASIC implementation steps from RTL all the way down to GDSII - this capability will be released in the coming weeks with completed SoC design examples that have been sent to SkyWater for fabricaiton. It is started as an Open-source flow for a true Open Source tape-out Experiment. striVe is a family of open everything SoCs:
+
+	- Open PDK
+	- Open EDA
+	- Open RTL
+	
+### striVe SoC Family
+
+![image](https://user-images.githubusercontent.com/123365828/216040755-dcce56f8-f62b-4146-9aae-3c04a83b8de1.png)
+
+The main goal of OPENLANE is to produce a clean GDSII with no human intervation (no-human-in-the-loop). here the meaning of clean is that:
+
+	- No LVS violations
+	- No DRC Violations
+	- No timing Violations
+
+OPENLANE is tuned for skyWter130nm open PDK. it can be used to harden Macros and chips.there is two mode of operation
+
+	- Autonomus : it is the push botton flow. with the push botton , it is a some time base design and due to this push botton, we get final GDSII
+	- interactive : here we can run comamds and steps one by one.
+
+It has large number of design examples(43 designs with their best configurations).
+
 
 ### OpenLANE Architecture
 
