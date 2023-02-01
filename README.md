@@ -1388,11 +1388,127 @@ To run OpenLANE on multiple designs at the same time, check this section.
 
 ### Adding a design
 
+### OpenLANE Architecture
+
+![image](https://user-images.githubusercontent.com/123365828/215985039-63ee7157-ff08-456a-95c1-ec70c6f66458.png)
+
+### OpenLANE Design Stages
+
+OpenLANE flow consists of several stages. By default all flow steps are run in sequence. Each stage may consist of multiple sub-stages. OpenLANE can also be run interactively which will be shown below.
+
+#### Synthesis
+
+	yosys - Performs RTL synthesis
+	
+	abc - Performs technology mapping
+	
+	OpenSTA - Pefroms static timing analysis on the resulting netlist to generate timing reports
+	
+#### Floorplan and PDN
+
+	init_fp - Defines the core area for the macro as well as the rows (used for placement) and the tracks (used for routing)
+	ioplacer - Places the macro input and output ports
+	pdn - Generates the power distribution network
+	tapcell - Inserts welltap and decap cells in the floorplan
+	
+####Placement
+
+	RePLace - Performs global placement
+	Resizer - Performs optional optimizations on the design
+	OpenDP - Perfroms detailed placement to legalize the globally placed components
+	
+#### CTS
+
+	TritonCTS - Synthesizes the clock distribution network (the clock tree)
+	
+#### Routing *
+
+	FastRoute - Performs global routing to generate a guide file for the detailed router
+	TritonRoute - Performs detailed routing
+	
+#### GDSII Generation
+
+	Magic - Streams out the final GDSII layout file from the routed def
+	
+#### Checks
+
+	Magic - Performs DRC Checks & Antenna Checks
+	Netgen - Performs LVS Checks
+	
+### OpenLANE Output
+
+All output run data is placed by default under ./designs/design_name/runs.
+
+designs/<design_name>
+├── config.tcl
+├── runs
+│   ├── <tag>
+│   │   ├── config.tcl
+│   │   ├── logs
+│   │   │   ├── cts
+│   │   │   ├── floorplan
+│   │   │   ├── magic
+│   │   │   ├── placement
+│   │   │   ├── routing
+│   │   │   └── synthesis
+│   │   ├── reports
+│   │   │   ├── cts
+│   │   │   ├── floorplan
+│   │   │   ├── magic
+│   │   │   ├── placement
+│   │   │   ├── routing
+│   │   │   └── synthesis
+│   │   ├── results
+│   │   │   ├── cts
+│   │   │   ├── floorplan
+│   │   │   ├── magic
+│   │   │   ├── placement
+│   │   │   ├── routing
+│   │   │   └── synthesis
+│   │   └── tmp
+│   │       ├── cts
+│   │       ├── floorplan
+│   │       ├── magic
+│   │       ├── placement
+│   │       ├── routing
+│   │       └── synthesis
+	
+	
+
+### Flow configuration
+	
+	-PDK / technology specific
+	-Flow specific
+	-Design specific
+
+#### Interactive Mode
+
+	You may run the flow interactively by using the -interactive option:
+
+	./flow.tcl -interactive
+	
+A tcl shell will be opened where the openlane package is automatically sourced:
+
+	% package require openlane 0.9
+	
+Then, you should be able to run the following commands:
+
+Any tcl command.
+	
+prep -design <design> -tag <tag> -config <config> -init_design_config -overwrite similar to the command line arguments, design is required and the rest is optional
+run_synthesis
+run_floorplan
+run_placement
+run_cts
+run_routing
+run_magic
+run_magic_spice_export
+run_magic_drc
+run_netgen
+run_magic_antenna_check
+The above commands can also be written in a file and passed to flow.tcl:
+
+	./flow.tcl -interactive -file <file>
+	
 ![Capture3](https://user-images.githubusercontent.com/123365828/215974771-d9d04de3-688e-4ce3-90bf-5294dc3c30bb.PNG)
-
-
-
-
-
-
 
