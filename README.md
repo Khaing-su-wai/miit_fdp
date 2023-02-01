@@ -1394,6 +1394,8 @@ To run OpenLANE on multiple designs at the same time, check this section.
 
 ### OpenLANE Design Stages
 
+![Capture3](https://user-images.githubusercontent.com/123365828/215974771-d9d04de3-688e-4ce3-90bf-5294dc3c30bb.PNG)
+
 OpenLANE flow consists of several stages. By default all flow steps are run in sequence. Each stage may consist of multiple sub-stages. OpenLANE can also be run interactively which will be shown below.
 
 #### Synthesis
@@ -1439,41 +1441,6 @@ OpenLANE flow consists of several stages. By default all flow steps are run in s
 
 All output run data is placed by default under ./designs/design_name/runs.
 
-designs/<design_name>
-├── config.tcl
-├── runs
-│   ├── <tag>
-│   │   ├── config.tcl
-│   │   ├── logs
-│   │   │   ├── cts
-│   │   │   ├── floorplan
-│   │   │   ├── magic
-│   │   │   ├── placement
-│   │   │   ├── routing
-│   │   │   └── synthesis
-│   │   ├── reports
-│   │   │   ├── cts
-│   │   │   ├── floorplan
-│   │   │   ├── magic
-│   │   │   ├── placement
-│   │   │   ├── routing
-│   │   │   └── synthesis
-│   │   ├── results
-│   │   │   ├── cts
-│   │   │   ├── floorplan
-│   │   │   ├── magic
-│   │   │   ├── placement
-│   │   │   ├── routing
-│   │   │   └── synthesis
-│   │   └── tmp
-│   │       ├── cts
-│   │       ├── floorplan
-│   │       ├── magic
-│   │       ├── placement
-│   │       ├── routing
-│   │       └── synthesis
-	
-	
 
 ### Flow configuration
 	
@@ -1510,5 +1477,5 @@ The above commands can also be written in a file and passed to flow.tcl:
 
 	./flow.tcl -interactive -file <file>
 	
-![Capture3](https://user-images.githubusercontent.com/123365828/215974771-d9d04de3-688e-4ce3-90bf-5294dc3c30bb.PNG)
+
 
