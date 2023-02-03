@@ -2009,6 +2009,162 @@ If we zooom into this, we find the buffers, gates, flip flops in this.
 	
 ![Capture12](https://user-images.githubusercontent.com/123365828/216519139-f73f16eb-81b8-463d-8b08-d7a085089b54.PNG)
 
+### Cell design and characterization flows
+	
+#### Inputs for cell design flow
+#### Cell design flow
+	
+As we know that standerd cells are placed in the library. And in the library many other cells are available which have same functionality but the size is different. As size is different the parameters like hVt, Ivt also different for each standerd cells.
+
+If we take one of the standerd cells called inverter, it has their own design flow by this it can be understandable to EDA tool.
+
+The cell design flow is devided into three part.
+
+	- Inputs
+	- Design steps
+	- Outputs
+
+![image](https://user-images.githubusercontent.com/123365828/216519767-1aaeebb7-10c3-4a97-b69a-3d8116a54938.png)
+
+#### 1. inputs
+	
+inputs required for cell design is PDKs, DRC and LVS rules SPICE models, library and user defined specs.
+
+### Circuit design steps
+	
+#### 2. design steps
+	
+steps are circuit design, layout design, characterization
+
+### 3. Outputs
+	
+The typical output what we get from the circuit design is CDL(circuit description language) file,GDSII,LEF,extracted spice netlist(.cir).
+
+### Layout design steps
+	
+	- implement function
+	
+![image](https://user-images.githubusercontent.com/123365828/216520109-cb52f448-5314-4f6f-b5fd-e2675d4ecc88.png)
+
+	- Derive the NMOS and PMOS network graph
+	
+![image](https://user-images.githubusercontent.com/123365828/216520224-a0108409-7738-48fa-8a39-3bc0389c1d87.png)
+
+	- Obtain the Euler's path
+	
+![image](https://user-images.githubusercontent.com/123365828/216520384-102e6d1b-34c1-45b2-9be6-404c6140dfb9.png)
+
+	- Stick diagram
+	
+![image](https://user-images.githubusercontent.com/123365828/216520482-5443ecae-d9e4-4552-a715-7fc6e68f098b.png)
+
+	- Convert stick diagram into proper layout
+	
+![image](https://user-images.githubusercontent.com/123365828/216520580-7421b90a-380b-4287-aabe-e376bab61e48.png)
+
+After layout design, we have to ecxtract the layout and characterize it. In characterization step, we can get the information about Timing, Noice,power.libs and function.
+
+### Characterization Flow
+	
+As of now, from the circuit design and layout design, we have final layout of buffer cell. where two buffers are connected in series with each other.
+	
+![image](https://user-images.githubusercontent.com/123365828/216521314-b80e9565-7317-47d5-8534-356744d0439d.png)
+
+Now steps of flow is:
+
+	- Read the model file
+	- read the extracted spice netlist
+	- reconize the behavior of buffer
+	- Read the subcircuit of the inverter
+	- Ateched the neccessory power source
+	- Apply the stimulus
+	- Provide the necessory of output capacitance
+	- Provide the necessory simulatin command
+	- This all steps we have to give in "GUNA" software. and this software will give the timing, noise, power.libs and functions.
+
+## General Timing characterization parameters
+	
+### Timing threshold defination
+	
+![image](https://user-images.githubusercontent.com/123365828/216521550-d9aa020c-9afa-4d1f-88c6-2dd7fc81c53e.png)
+
+Let we take the waveform from the output of the first buffer and it will be input of the second buffer and taking output of the second buffer also.
+	
+![image](https://user-images.githubusercontent.com/123365828/216521608-846c5be4-15be-4d7e-b0a1-159d0d42c91b.png)
+
+	- slew_low_rise_thr
+	
+here low means nearer to the ground, and rise tresold means we want to measer the slope of the increasing graph. typical value of slew low rise thr is around 20-30%.
+	
+![image](https://user-images.githubusercontent.com/123365828/216521706-67a7c657-9e1a-4ae0-a4e7-0bdf5c7c2d9e.png)
+
+	- slew_high_rise_thr
+	
+same as above, high means nearer to high value.
+	
+![image](https://user-images.githubusercontent.com/123365828/216521949-4153db2c-ae91-469e-9b3f-4a0bab516071.png)
+
+whenever we want to calculate the slew, take the point at 20% from the low and take the point at 20% from the high. according to these point, take the time data and the time difference between them will helps to calculate the slew.
+
+	- slew_low_fall_thr
+	
+![image](https://user-images.githubusercontent.com/123365828/216522219-3e967df6-583d-408a-9d6c-9e3e62cfb5ae.png)
+
+	- slew_high_fall_thr
+	
+![image](https://user-images.githubusercontent.com/123365828/216522391-b0924b80-1d4c-4a35-b4b2-b4f708c174c5.png)
+
+Now, taking the waveform of input stimulus which is input of the first buffer and with that taking output of the first buffer.
+
+Similar as a slew, thresolds are for delay also available. for that same as slew, we have to take some rise and fall points from the waveforms. this tresolds are almost 50%.
+
+	- in_rise_thr
+	
+![image](https://user-images.githubusercontent.com/123365828/216522832-4b42c74c-494c-4f8d-9d49-1569168180ca.png)
+	
+	- in_fall_thr
+
+![image](https://user-images.githubusercontent.com/123365828/216522932-2b99b1f2-5eb4-4510-b717-ff5b8bd5655e.png)
+	
+	- out_rise_thr
+	
+![image](https://user-images.githubusercontent.com/123365828/216523052-a7f9479a-f8fb-4424-a797-a15213f44f9d.png)
+	
+	- out_fall_thr
+	
+So, according to rise and fall theresold we can find the rise delay and fall delay of the buffer.
+	
+![image](https://user-images.githubusercontent.com/123365828/216523181-5535074d-775b-4a8b-aedd-87309c3c3230.png)
+
+### Propogation delay and Transition time
+	
+#### propogation delay
+	
+let's take the same setup for understand the propogation delay. Time delay = Time(out_thr)-time(in_thr).
+
+Let's take waveform on which we can apply above formula.
+	
+![image](https://user-images.githubusercontent.com/123365828/216523311-88fcd0ee-62d9-4611-9785-1e16a64b5484.png)
+
+In any case if thresold point move at the top, at that time we get negative delay because output comes before input. so reason behind the negative delay is the poor choice of the tresold points. which is not acceptable. so, choosing the thresold point is very important.
+	
+![image](https://user-images.githubusercontent.com/123365828/216523368-46263fb6-6789-4cef-8e0f-82cac12caa2a.png)
+
+Taking another example where the wire delay is very high because of high distance between two elements. so, here by choosing correct thresold point then also we get the negative delay.
+	
+![image](https://user-images.githubusercontent.com/123365828/216523419-1078de73-4f16-42e2-99f7-5027033becef.png)
+
+### Transition time
+	
+transition time = time(slew_high_rise_thr)- time(slew_low_rise_thr)
+
+or
+
+transition time = time(slew_high_fall_thr)- time(slew_low_fall_thr)
+
+let's take waveform for understand the slew calculation.
+	
+![image](https://user-images.githubusercontent.com/123365828/216523595-24d027c9-8e14-4cb8-ac1d-a5ae4ea573ed.png)
 
 
 	
