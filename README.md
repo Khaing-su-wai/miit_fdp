@@ -1875,6 +1875,34 @@ So, floor plan is ready for Placement and Routing step.
 	
 Before run the floorplanning, we required some switches for the floorplanning. these we can get from the configuration from openlane.
 
+![Capture1](https://user-images.githubusercontent.com/123365828/216514763-a47e9d36-aa45-4c65-b1b2-d62917d4424f.PNG)
+
+Here we can see that the core utilization ratio is 50% (bydefault) and aspect ratio is 1 (bydefault). similarly other information is also given. But it is not neccessory to take these values. we need to change these value as per the given requirments also.
+
+Here FP_PDN files are set the power distribution network. These switches are set in the floorplane stage bydefault in OpenLANE.
+
+![Capture2](https://user-images.githubusercontent.com/123365828/216514841-bf5755fa-4989-469c-a9f4-1c546f19dcb9.PNG)
+
+Here, (FP_IO MODE) 1, 0 means pin positioning is random but it is on equal distance.
+
+In the OpenLANE lower priority is given to system default (floorplanning.tcl), the next priority is given to config.tcl and then priority is given to PDK varient.tcl (sky130A_sky130_fd_sc_hd_congig.tcl).
+
+Now we see, with this settings how floorplan run.
+
+### Reviewing floorplan files and steps to view floorplan
+
+In the run folder, we can see the connfig.tcl file. this file contains all the configuration that are taken by the flow. if we open the config.tcl file, then we can see that which are the parameters are accepted in the current flow.
+
+![Capture3](https://user-images.githubusercontent.com/123365828/216514951-40406d62-25e9-44d0-a17a-73e6f862fc61.PNG)
+
+here we can see that, the core utilization is 35%, aspect ratio is 1 and core margin is taken as 0. while in default the core utilization is 50%. this is the issue. because this design is override the system. but it is the taken from PDK varient.tcl file. so priority vise it is true.
+
+To watch how floorplane looks, we have to go in the results. in the result, one def( design exchange formate) file is available. if we open this file, we can see all information about die area (0 0) (660685 671405), unit distance in micron (1000). it means 1 micron means 1000 databased units. so 660685 and 671405 are databased units. and if we devide this by 1000 then we can get the dimensions of chips in micrometer.
+
+![Capture4](https://user-images.githubusercontent.com/123365828/216515024-7994a76f-89e9-4ffa-a546-873c4389f8ab.PNG)
+
+
+
 
 	
 
