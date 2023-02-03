@@ -1900,7 +1900,114 @@ here we can see that, the core utilization is 35%, aspect ratio is 1 and core ma
 To watch how floorplane looks, we have to go in the results. in the result, one def( design exchange formate) file is available. if we open this file, we can see all information about die area (0 0) (660685 671405), unit distance in micron (1000). it means 1 micron means 1000 databased units. so 660685 and 671405 are databased units. and if we devide this by 1000 then we can get the dimensions of chips in micrometer.
 
 ![Capture4](https://user-images.githubusercontent.com/123365828/216515024-7994a76f-89e9-4ffa-a546-873c4389f8ab.PNG)
+	
+so, the width of chip is 660.685 micrometer and height of the chip is 671.405 micrometer.
 
+To see the actual layout after the flow, we have to open the magic file by adding the command magic -T /home/kunalg123/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def
+
+And then after pressing the enter, Magic file will open. here we can see the layout.
+	
+![Capture5](https://user-images.githubusercontent.com/123365828/216517453-5820797b-db6e-4979-971c-acc55b1e29d8.PNG)
+
+### Reviewing floorplan layot with magic.
+	
+In the layout we can see that, input output pins are at equal distance.
+	
+![Capture6](https://user-images.githubusercontent.com/123365828/216517574-d9c1daad-523d-464f-b000-ec90974502a5.PNG)
+
+after selecting (To select object, first click on the object and then press 's' from keyboard. the object will hight lited. to zoom in the object, click on the object and then press 'z' and for zoom out press 'sft+z') one input pin, if we want to check the location or to know at on which layer it is available, we have to open tkcon window and type "what". it will shows all the details about that perticular pin.
+	
+![Capture8](https://user-images.githubusercontent.com/123365828/216517772-ad8babd4-0ceb-49f9-9459-8332b1a6c582.PNG)
+	
+![Capture9](https://user-images.githubusercontent.com/123365828/216517893-37f7b134-e304-4936-92b7-29379c7fb8e0.PNG)
+
+so, it show that the pin is in the metal 3.similarly doing for the vertical pins, we find that this pin is at metal 2.
+	
+![Capture10](https://user-images.githubusercontent.com/123365828/216517982-827322a1-7185-4829-85d0-99daf24e1e8d.PNG)
+	
+Along with the side rows,the Decap cells are arranged at the border of the side rows.
+	
+![image](https://user-images.githubusercontent.com/123365828/216518053-c1e58e93-4026-441e-bf6f-8d7d360dbcad.png)
+
+Another cells also placed here, which is a tap cells. these cells are meant to avoide the latch-up problems in the CMOS devices. it connect N-well to the Vdd and substrate to the Ground. these tap cells are placed at diagonally equal distance.
+	
+![image](https://user-images.githubusercontent.com/123365828/216518153-a0c5bb17-55c5-4333-9503-e204528a5599.png)
+
+In the floorplane, standerd cells are not placed but here standerd cells are available in the left side of the floorplan. we can see few boxes are there.
+	
+![image](https://user-images.githubusercontent.com/123365828/216518222-9895ab3f-1b8a-4a35-a7db-ff926316c9f8.png)
+
+here we can see that first standerd cells is for buffer 1. similarly other cells are for buffer 2, AND gate etc.
+
+### Library building and Placement
+	
+#### Netlist binding and initial place design
+	
+#### 1. bind netlist with physical cells
+	
+Taking netlist as what we taken before,
+	
+![image](https://user-images.githubusercontent.com/123365828/216518415-aa919340-cba3-4840-8fc8-983980550c73.png)
+	
+Here, we can see that every gate or flip-flops have a shape to understand the functionality of the element. But practically, this cells are square or rectangular boxes which has internally some logic to perform. So, here we are taking all the elements from netlist and giving them a perfact height and width with perticular dimention. These all cells together are called 'self'. And this self are stored in the lybrary. Library have all the innformation about all the blocks, like height, width , time delay, conditional innformation, etc. library also have a option for the similar cells (with same functionality) like this with different height and width. According to our space available at floorplanning we can choose out of them.
+
+![image](https://user-images.githubusercontent.com/123365828/216518469-8b790cc1-1c4d-4c98-8e50-29f70736e1e6.png)
+
+After giving size and shape to each and every box, next step is to take the boxes or element from library and placed in the floorplan. This is called placements of the cells.According to the design of the netlist, we have to put physical blocks in the floorplan which we have design before.Put all the blocks according to the input and output of that perticular blocks.
+	
+![image](https://user-images.githubusercontent.com/123365828/216518529-c041012b-24fb-4267-a6bb-2ab285a3f6fd.png)
+
+up to here we have done stage one and stage two placement. Now we will going for stage 3 and 4. here we have to place FF1 of stage 3 nearer to the Din3 and FF2 of stage 3 nearer to the Dout3. But Din3 and Dout3 are at somme distance from eachother. same thing is there for FF1 and FF2 of stage 4. Let's we placed these all element in such manner that all elements are closed to it's input and output pins.
+
+![image](https://user-images.githubusercontent.com/123365828/216518597-166a82b4-f532-48fd-9602-26faba891cd3.png)
+
+But, the distance of FF1 of Stage 4 and Din4 is still far them others. By optimizing the placement, we can solve this problem.
+
+### Optimize placement using estimated wire lenght and capacitance
+	
+#### 2. Optimize Placement
+	
+As we seen that the distance from Din2 to FF1 of stage 2 is higher. so if we connect the wire between them then resistance and capacitance of the wire comes in to the picture. and due to this the signal integrity can not maintain.
+
+To maintain the integrity of the signal out from Din2 to FF1, we have to put some repeaters like buffers on between Din2 and FF1. But it will cause of loss of area.
+
+In the stage 1, there is no need of any repeater to transmit the signal. But in stage 2, due to high distance, the lenth of wire is high and signal is not transmitted in perticular range. so we required repeater.
+	
+![image](https://user-images.githubusercontent.com/123365828/216518707-629eed91-3431-4238-89e0-ba8c1e555dc8.png)
+
+#### Final Optimization
+	
+Similar as stage 2, in Stage 3 also we required the buffer between gate 2 and FF2.
+
+![image](https://user-images.githubusercontent.com/123365828/216518835-46945352-5fcf-4caa-bce3-febebac4651c.png)
+	
+![image](https://user-images.githubusercontent.com/123365828/216518852-2aa63d56-50e2-4727-9b7c-670dbf8172f3.png)
+	
+Stage 4 is bit tricky as compared to other stages. image
+
+Now we have to check that, what we have done is correct or not. For that we need to do Timing analysis by considering the ideal clocks and according to the data of analysis, we will understand that, the placement is correct or not.
+
+### Need for libraries and characterization.
+	
+#### Library charactorization and modelling
+	
+In whole IC design, we have to go through synthesis, floor/power planning, placement, routing , STA. In all this steps one thing remain common, which is "Gates or Cells". That is where the library charactorization becomes very important.
+
+#### Congestion aware placement using RePLAce
+	
+Right now we are not constrain about timing, but constrain about the congestion. so, we are making the congrstion is less.
+
+The placement is donne in two stages. Global and detailed. In global placement, legalization is not happened but after detailed placement legalization will be done.
+
+When we run the placement, first Global placement is happens. main objective of glibal placement is to reducing the length of wires.
+
+Now opening the Magic file to see actual view of standerd cells placement.And the actual view in the magic file is given below,
+	
+![Capture11](https://user-images.githubusercontent.com/123365828/216519075-9f473ab8-9fdc-46fb-9787-331e56b19153.PNG)
+
+If we zooom into this, we find the buffers, gates, flip flops in this.
+	
+![Capture12](https://user-images.githubusercontent.com/123365828/216519139-f73f16eb-81b8-463d-8b08-d7a085089b54.PNG)
 
 
 
