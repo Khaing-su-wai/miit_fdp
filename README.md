@@ -2562,7 +2562,7 @@ it is time taken to the output waveform to 20% value to 80% value.
 
 ![image](https://user-images.githubusercontent.com/123365828/216755813-3ec31434-5e16-43c8-8194-6d5dcceedeb0.png)
 
-so, rise time= (4.00742-2.51611)e-09 = 1.4913 nsec.
+so, rise time= (2.16179 - 2.20421)e-09 = 0.04242 nsec.
 
 #### fall time
 	
