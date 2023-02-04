@@ -2560,7 +2560,7 @@ Here, we have to find value of 4 parameters.
 	
 it is time taken to the output waveform to 20% value to 80% value.
 
-
+![image](https://user-images.githubusercontent.com/123365828/216755813-3ec31434-5e16-43c8-8194-6d5dcceedeb0.png)
 
 so, rise time= (4.00742-2.51611)e-09 = 1.4913 nsec.
 
@@ -2576,15 +2576,15 @@ so, fall time=0.08745 nsec.
 	
 it is the time difference between the 50% of input and 50% of the output.
 
-
+![image](https://user-images.githubusercontent.com/123365828/216755492-59c0e0c3-746d-48d3-831c-e4e146803577.png)
 
 so, propogation delay = 0.60185 nsec.
 
 #### cell fall delay
 	
 it is time for output falling to 50% and input is rising to 50%.
-
-![image](https://user-images.githubusercontent.com/123365828/216754816-6edab10f-ec41-49ed-9491-9fef0c601aba.png)
+	
+![image](https://user-images.githubusercontent.com/123365828/216755193-aea7dfb6-d7df-46ec-8f0e-a33f8550fbb1.png)
 
 so, cell fall delay= 0.0778 nsec.
 
