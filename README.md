@@ -2166,6 +2166,136 @@ let's take waveform for understand the slew calculation.
 	
 ![image](https://user-images.githubusercontent.com/123365828/216523595-24d027c9-8e14-4cb8-ac1d-a5ae4ea573ed.png)
 
+# Day 9 -Design library cells using Magic Layout and ngspice characterization
+
+## Labs for CMOS inverter ngspice simulations
+
+### SPICE deck creation for CMOS innverter
+
+### IO placer revison
+
+Till now, we have done floor planning and run placement also. But if we want to change the floorplanning, for example, in our floor planning, pins are at equal distance and if we want to change it then we can also make it by "Set" command.
+
+For that first we have to check the swithes in the configuration and from that we have to take the syntax "env(FP_IO_MODE) 1". and make it to the "env(FP_IO_MODE) 2". then again run the floorplanning.
+
+Then check the changes in the pins location through magic -T.
+
+![Capture2](https://user-images.githubusercontent.com/123365828/216750012-bab92cfb-55ea-4872-9dd7-bea998dd0d56.PNG)
+
+So, here we can see that there are no pins in the upper half side. all pins are in the lower half of the core.
+
+### SPICE deck creation for CMOS inverter
+
+#### VTC- SPICE simulations.
+
+Before entering into the simulation, we have to creat the spice deck. The spice deck is nothing but netlist. so, we have to creat the spice deck for CMOS.
+
+	- Component connectivity
+
+![image](https://user-images.githubusercontent.com/123365828/216750345-9392881a-7096-4fc2-a318-5cd70c0079e8.png)
+	
+	- Define the components values
+
+![image](https://user-images.githubusercontent.com/123365828/216750362-44bfd592-bf3a-472c-87fb-bb12e7d5562e.png)
+
+	- Identyfy the nodes
+	
+![image](https://user-images.githubusercontent.com/123365828/216750375-24e44789-dbc2-467d-a554-4a484e414ef0.png)
+
+	- Name 'Nodes'
+	
+![image](https://user-images.githubusercontent.com/123365828/216750389-2f648c55-7d72-49ee-aa73-335e2b50481e.png)
+
+Now, let's strat the writing the SPICE deck
+
+![image](https://user-images.githubusercontent.com/123365828/216750401-e0d4466c-8a20-4b2e-8acf-89f11e30d8f7.png)
+
+Here, in the syntex, It is like Name of the mosfet, drain , gate, substrait , source. so, the meaning of the syntex is that, name of the mosfet is M1, Drain is connected to OUT node, Gate is connected to IN node, Substrait is connected to Vdd and the Source is connected to Vdd node. PMOS says the type of mosfet and the Width and lenth of channel is defined. similarly, For M2, syntex were written.
+
+### SPICE simulation lab for CMOS
+
+Tile we discribe the connectivity information about CMOS inverter only. Now we have to discribe connectivity information about other components also like source, capacitor etc. so, lets look into the other components.
+
+First we discribe the load capacitor and then about the Vdd and Vin.
+
+![image](https://user-images.githubusercontent.com/123365828/216750423-91713018-1a72-40ce-ac02-d7949a28b5bf.png)
+
+Now, we have to give simulation command. which is about swiping the Vin from 0 to 2.5 with the steps of 0.05. Because we want Vout while changing the Vin.
+
+![image](https://user-images.githubusercontent.com/123365828/216750428-8b3751a4-a3f2-4a35-94c2-72c1d622ca73.png)
+
+The final step is to discribe the Model file.Model file contains all the details about PMOS and NMOS. from this file only we get the information about PMOS and NMOS.
+
+![image](https://user-images.githubusercontent.com/123365828/216750441-a89d05dd-ec7b-4c90-9f60-20644a18d2d8.png)
+
+So, the total program is given below,
+
+![image](https://user-images.githubusercontent.com/123365828/216750450-54d381af-9af8-417c-a360-b32cbce98dbc.png)
+
+Now, doing the simulation and get the graph like this,
+
+![image](https://user-images.githubusercontent.com/123365828/216750454-a97a05b8-1dda-4bde-a8fc-a6b3a9d39ee4.png)
+
+Now, doing other simulation in which we change the PMOS width to 3 times of NMOS width. and after diong the simulation, we get the graph like this,
+
+![image](https://user-images.githubusercontent.com/123365828/216750461-facf8b9a-7473-4b20-bf0c-1c5c1ca98e0f.png)
+
+The difference between this two graph is that in the second graph the transfer charactoristic is lies in the ecxact middle of the graph where in the first graph it is lies left from the middle of the graph.
+
+### Switching Thresold Vm
+
+These both model of different width has their own application. By comparing this both waveform, we can see that the shape of the both waveform is same irrespective of the voltage level.
+
+This thing tell us that when Vin is at low, output is at high and when Vin is at high, the output is at low. so the charactoristic is maintain at all kind of CMOS with different size of NMOS or PMOS. That is why CMOS logic is very widely used in the design of the gates.
+
+Switching thresold, Vm (the point at which the device switches the level) is the one of the parameter that defined the robustness of the Inverter. Switching thresold is a point at which Vin=Vout.
+
+![image](https://user-images.githubusercontent.com/123365828/216750487-12623e59-a9d6-4cbf-92d8-505309132622.png)
+
+In this figure, we can see that at Vm~0.9v, Vin=Vout. This point is very critical point for the CMOS because at this point there is chance that both PMOS and NMOS are turned on. If both are turned on then there is chances of leakage current(Means current flow direcly from power to ground).
+
+By comparing this both the graph we can understang the concept of switching thresold voltage.
+
+![image](https://user-images.githubusercontent.com/123365828/216750495-1da4c89a-1af5-4d83-a0e3-a7e67786e251.png)
+
+![image](https://user-images.githubusercontent.com/123365828/216750505-f9f9c5da-8d27-48e4-bb57-778a04e28fd2.png)
+
+## Lab steps to git clone vsdstdcelldesign
+
+To get the clone, copy the clone address from reporetery and paste in openlane terminal after the command "git clone". this will create the folder called "vsdstdcelldesign" in openlane directory.
+
+![Capture3](https://user-images.githubusercontent.com/123365828/216750536-255b0ec1-822f-46b4-93ee-5d92f22e3424.PNG)
+
+now, if we open the openlane directory, we find the vsdstdcelldesing folder in the openlane directory.
+
+![Capture4](https://user-images.githubusercontent.com/123365828/216750560-3c067834-3afa-47c7-b5ad-65832ada94b0.PNG)
+
+Now if we goes in the vsdstdcelldesign folder and open it, we get the .mag file,libs file etc.
+
+![Capture5](https://user-images.githubusercontent.com/123365828/216750586-87713941-2ef7-43d2-8967-5f3739c33dc7.PNG)
+
+now, let's open the .mag file and see that which layers are used to build the inverter. But before opening the mag file, we need tech file. so we will copy this file from this given below address,
+
+![image](https://user-images.githubusercontent.com/123365828/216750795-532dfc9a-6cf6-421f-9210-74f4d0f118d0.png)
+
+And do copy by "cp" command to the location which is given below,
+
+![image](https://user-images.githubusercontent.com/123365828/216750829-0e32d055-3d7a-4b7d-b9eb-9c0cb5e1ca51.png)
+
+![Capture6](https://user-images.githubusercontent.com/123365828/216750660-87ea58ee-8d14-4386-afd7-177e33f3d24c.PNG
+
+Now, we can see that this file is copied in the vsdstdcelldesign folder.
+
+![Capture7](https://user-images.githubusercontent.com/123365828/216750709-400c0838-d979-4a37-b1d8-64e7a1437ad2.PNG)
+
+Now, here to see the layout in magic, we don't need to write the whole address because we copy the tech file here.
+
+Now, appying the magic command like this,
+
+![Capture8](https://user-images.githubusercontent.com/123365828/216750734-6024ecc5-8a53-4f08-a252-8ff4516f08d2.PNG)
+
+
+
 
 	
 
