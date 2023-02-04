@@ -2481,7 +2481,23 @@ And finally our CMOS is looks like this after the fabrication.
 	
 ![Capture8](https://user-images.githubusercontent.com/123365828/216751958-8199d300-6e53-4f3c-8972-e42dcf1240e2.PNG)
 
+In sky130, every color is showing the different layer. here the firsst layer is for local interconnect shown by blue_perpel color, then second layer is metal 1 which is showm by light perple color, and the metal 2 is shown by pink color. N-well is showm by solide das line. green is N-diffusion region. and red is for polysilicon gate. similarly the brown color is for P-diffusion.
+
+In tckon window, we can see that the selected area is NMOS and similarly we can chech PMOS also. and that is how we can check that the CMOS is working or not.
 	
+![Capture9](https://user-images.githubusercontent.com/123365828/216752034-75b2f6c3-67ea-4850-b130-b2af7625b236.PNG)
+
+semilarly we check for the output terminal also.(by double pressing "S" to select the entire thing at output Y).
+	
+![image](https://user-images.githubusercontent.com/123365828/216752159-d97467ee-aee1-4535-9bde-4927c75db549.png)
+	
+so, we can see that "Y" is attached to locali in cell def sky130_inv.
+
+we can check the source of the PMOS is connected to the ground or not. and similarly we can check it for NMOS also.
+	
+![Capture10](https://user-images.githubusercontent.com/123365828/216752079-de777fda-0b20-4034-92ce-53be6aa25834.PNG)
+
+
 
 
 	
