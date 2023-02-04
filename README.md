@@ -2489,16 +2489,111 @@ In tckon window, we can see that the selected area is NMOS and similarly we can 
 
 semilarly we check for the output terminal also.(by double pressing "S" to select the entire thing at output Y).
 	
-![image](https://user-images.githubusercontent.com/123365828/216752159-d97467ee-aee1-4535-9bde-4927c75db549.png)
-	
 ![image](https://user-images.githubusercontent.com/123365828/216752486-0b4cf6ef-e967-4a24-b90d-bbd75234b517.png)
 
-	
 so, we can see that "Y" is attached to locali in cell def sky130_inv.
 
 we can check the source of the PMOS is connected to the ground or not. and similarly we can check it for NMOS also.
 	
-![Capture10](https://user-images.githubusercontent.com/123365828/216752079-de777fda-0b20-4034-92ce-53be6aa25834.PNG)
+### Lab steps to create std cell layout and extract spice netlist
+	
+To extract the file from here, we have to write the command in tckon window. and the comand is "extract all".
+Now let's go to this location from the terminal. it is exctracted.
+	
+![Capture11](https://user-images.githubusercontent.com/123365828/216752785-e658dbc5-f35d-4a62-bcfd-bed58f24f00c.PNG)
+
+we will use this .ext file to create the spice file to be use with our ngspice tool. for that we have apply the comand "ext2spice cthresh 0 rthresh 0". this will not create anything new. now again we have to type "ext2spice" comand in tckon window.
+	
+![Capture12](https://user-images.githubusercontent.com/123365828/216752790-d06c0ad7-afb6-44e7-9d45-03c963493b07.PNG)
+
+so, now we are checking the location and at there spice file has been created.
+	
+![Capture13](https://user-images.githubusercontent.com/123365828/216752812-0f6c99b1-37f6-4a4a-9097-8d130e3bd630.PNG)
+
+let's see what inside the spice file by "vim sky130_inv.spice".
+	
+![Capture14](https://user-images.githubusercontent.com/123365828/216752834-bae35153-7c53-4601-a448-ec9ce1a5d134.PNG)
+
+### Sky130 Tech File labs
+	
+#### Lab steps to create final SPICE dexk using sky130 tech.
+	
+![Capture14](https://user-images.githubusercontent.com/123365828/216752834-bae35153-7c53-4601-a448-ec9ce1a5d134.PNG)
+	
+here, we can see the all details about the connectivity of the NMOS and PMOS and about the power supply also.
+
+X0 is NMOS and X1 is PMOS and both's connectivity is shown as GATE DRAIN SUBSTATE SOURCE.
+
+But here the scale is 10000 um. but in Magic simulation, it is 0.01.
+	
+![Capture15](https://user-images.githubusercontent.com/123365828/216752871-07dc2ac2-b490-491f-8913-fc3b626ba50f.PNG)
+
+SO, we are going to change the dimension here in the terminal. so any measurement will be in this scale of 0.01u. i.e., width=37*0.01u.
+
+Now we have to include the PMOS and NMOS lib files. it is inside the libs folder in the vsdstdcellsdesign folder.
+	
+![Capture16](https://user-images.githubusercontent.com/123365828/216752894-8256a133-6a05-4ca8-a017-386477e34fea.PNG)
+
+so, now we include this file in the terminal by ".include ./libs/pshort.lib" and ".include ./libs/nshort.lib" comand.
+
+And then set the supply voltage "VDD" to 3.3v by "VDD VPWR 0 3.3V" comand. and similarly set the value of VSS also.
+
+Now, we need to specify the input files. by Va A VGND PULSE(0V 3.3V 0 0.1ns 2ns 4ns).
+
+Also add the comand for the analysis like, ".tran 1n 20n", ".control" , "run",".endc",".end".
+	
+![Capture17](https://user-images.githubusercontent.com/123365828/216752971-5c66a515-c887-4c28-9b3c-c4c207615606.PNG)
+
+after running this file we get output of ngspice like this,
+	
+![Capture19](https://user-images.githubusercontent.com/123365828/216752984-de0b028f-7d70-4286-b3f5-4e34df816d48.PNG)
+
+Now, ploting the graph here by comand, "plot y vs time a".
+	
+![Capture20](https://user-images.githubusercontent.com/123365828/216753002-bb14471b-043e-4038-9c49-1345545a1e62.PNG)
+
+### Lab steps to characterize inverter using sky130 model file
+	
+Here, we have to find value of 4 parameters.
+
+#### rise time
+	
+it is time taken to the output waveform to 20% value to 80% value.
+
+
+
+so, rise time= (4.00742-2.51611)e-09 = 1.4913 nsec.
+
+#### fall time
+	
+it is the time take by output for transition from 80% to 20%.
+
+
+
+so, fall time=0.08745 nsec.
+
+#### propogation delay
+	
+it is the time difference between the 50% of input and 50% of the output.
+
+
+
+so, propogation delay = 0.60185 nsec.
+
+#### cell fall delay
+	
+it is time for output falling to 50% and input is rising to 50%.
+
+
+
+so, cell fall delay= 0.0778 nsec.
+
+# Day 10 -Pre-layout timing analysis and importance of good clock tree
+	
+## Timing modelling using delay tables
+	
+### Lab steps to convert grid info to track info
+	
 
 
 
