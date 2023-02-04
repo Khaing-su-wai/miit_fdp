@@ -2570,15 +2570,15 @@ it is the time take by output for transition from 80% to 20%.
 
 ![image](https://user-images.githubusercontent.com/123365828/216754165-fa10da84-9fbe-4ab7-b975-b4465727fff6.png)
 
-so, fall time=0.08745 nsec.
+so, fall time=0.01695 nsec.
 
 #### propogation delay
 	
 it is the time difference between the 50% of input and 50% of the output.
 
-![image](https://user-images.githubusercontent.com/123365828/216755492-59c0e0c3-746d-48d3-831c-e4e146803577.png)
+![image](https://user-images.githubusercontent.com/123365828/216756641-bb5e76c0-1df3-485e-b811-1707976cb918.png)
 
-so, propogation delay = 0.60185 nsec.
+so, propogation delay = 0.00039 nsec.
 
 #### cell fall delay
 	
@@ -2586,7 +2586,7 @@ it is time for output falling to 50% and input is rising to 50%.
 	
 ![image](https://user-images.githubusercontent.com/123365828/216755193-aea7dfb6-d7df-46ec-8f0e-a33f8550fbb1.png)
 
-so, cell fall delay= 0.0778 nsec.
+so, cell fall delay= 0.00004 nsec.
 
 # Day 10 -Pre-layout timing analysis and importance of good clock tree
 	
