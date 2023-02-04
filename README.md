@@ -2491,6 +2491,9 @@ semilarly we check for the output terminal also.(by double pressing "S" to selec
 	
 ![image](https://user-images.githubusercontent.com/123365828/216752159-d97467ee-aee1-4535-9bde-4927c75db549.png)
 	
+![image](https://user-images.githubusercontent.com/123365828/216752486-0b4cf6ef-e967-4a24-b90d-bbd75234b517.png)
+
+	
 so, we can see that "Y" is attached to locali in cell def sky130_inv.
 
 we can check the source of the PMOS is connected to the ground or not. and similarly we can check it for NMOS also.
