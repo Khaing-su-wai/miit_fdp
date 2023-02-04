@@ -2568,7 +2568,7 @@ so, rise time= (4.00742-2.51611)e-09 = 1.4913 nsec.
 	
 it is the time take by output for transition from 80% to 20%.
 
-
+![image](https://user-images.githubusercontent.com/123365828/216754165-fa10da84-9fbe-4ab7-b975-b4465727fff6.png)
 
 so, fall time=0.08745 nsec.
 
@@ -2584,7 +2584,7 @@ so, propogation delay = 0.60185 nsec.
 	
 it is time for output falling to 50% and input is rising to 50%.
 
-
+![image](https://user-images.githubusercontent.com/123365828/216754816-6edab10f-ec41-49ed-9491-9fef0c601aba.png)
 
 so, cell fall delay= 0.0778 nsec.
 
