@@ -2826,6 +2826,201 @@ magic -T /home/kunalg123/Desktop/work/tools/openlane_working_dir/pdks/sky130A/li
 
 ![Capture12](https://user-images.githubusercontent.com/123365828/216831420-a2b3316b-344b-4be1-954a-b10fcbb9d82c.PNG)
 
+### Clock tree synthesis TritonCTS and signal integrity
+	
+### Clock tree routing and buffering uisng H-Tree algorithm
+	
+#### what is clock tree synthesis?
+	
+As shown in below, figure, let's connect clk1 to FF1 & FF2 of stage 1 and FF1 of stage 3 and FF2 of stage 4 with out any rules.
+
+![image](https://user-images.githubusercontent.com/123365828/216831512-208d628c-7f49-40c5-a107-a2de7a0106e8.png)
+
+Now, let's see the problem with this clock Rout. let us say time required to reach the FF1 and FF2 of stage 1 are t1 and t2 for clock1. so, we can say that t2-t1= skew (ideally skew=o).
+
+![image](https://user-images.githubusercontent.com/123365828/216831561-d94dc035-bf3a-4835-879d-6f8fff9cd485.png)
+
+To make, skew to be 0, this rout definatly not help. so, we can say that what we built the tree is "BAD TREE". so, the concept of H-tree comes out. with the Mid point strategy, H-tree form.
+
+![image](https://user-images.githubusercontent.com/123365828/216831592-018b8bc1-56cc-4fb1-a598-b704ad564997.png)
+
+Next thing is clock tree synthesis (buffering).as we see in the clockk tree and we observed that clock has to travel through all wires and it will charge all capacitor which are comming in the path of this wire.
+
+The problem occurse due to the charging the capacitor is signal inntigrity problem because of transition of signals. solution of this problem is add the repeaters here. the repaters are the similar as what we use in the data path but the main difference is, here repeater has equal rise and fall time.
+	
+![image](https://user-images.githubusercontent.com/123365828/216832049-5df4ac33-934c-4959-a1cc-4ac19e0efa84.png)
+
+Crosstalk and clock net shielding
+We build the clock tree in a manners that the skew becomes zero between launch Flop and capture flop. but if accedently any crosstalk heppense then everything what we had design is detoriated.
+
+Let take the first clock net and protect it by shielding. here we protect the clock network from outside world. if the protection is not there then problems like glitch and delta delay is heppens.
+
+The glitch is heppence because of Coupling capacitance between the wires.
+	
+![image](https://user-images.githubusercontent.com/123365828/216832087-ddce9f7f-9163-46b8-8316-7851c5e5040d.png)
+	
+The shielding is the technique, by which we can protect the net from these problems. In a shielding, we put wire between the other teo wire where coupling capacitance is generate. This extra wire is grounded or connected to VDD.
+
+Now, let's see about the delta delay.
+	
+![image](https://user-images.githubusercontent.com/123365828/216832126-11733d37-7ea7-4c41-82c0-4d1e1ac8c09d.png)
+
+### Lab step to run CTS using TritonCTS
+	
+Now next step is CTS. for that write the command: "run_cts".
+	
+![Capture13](https://user-images.githubusercontent.com/123365828/216832144-6e2aafe0-3f4c-4217-b1f0-b9846d5a5344.PNG)
+
+In CTS stage the buggers are added in the paths. so, it will modifiying the netlist. so, if we go in the synthesis folfer and check the files, where cts.v file will avaiilable and this file contains the added buffers.
+
+### Lab steps to verify CTS runs
+	
+we have run CTS.Now before we goes into the post cts flow, we need to know that the actual meaning of the "run" command. This is the proc of tcl file. so, lets see, from where, openlane take this procs. for that we need to goes into the openlane and then goes into scripts and then check the "tcl_commands". in this file tcl commands are there for every stages what we have run till now. so let's see the "cts.tcl" file.
+	
+![Capture14](https://user-images.githubusercontent.com/123365828/216832199-358f6ad9-90ea-4b88-8b91-7ed65fc015fb.PNG)
+
+here we can see the many procs are there. so here we can see the procs are run during the CTS run.
+	
+![Capture15](https://user-images.githubusercontent.com/123365828/216832226-ecba8a17-ee64-40f6-ab01-54460a7f98b2.PNG)
+
+so when we run the cts in the flow, basically it do this things.
+
+first it run the tritonCTS by givin total information.
+
+then it set the value of timer.
+
+Then it goes for open the openroad.
+
+if we check the openroad folder, at that directory "or.files" are available which was runs in the OPENROAD EDA tool.
+
+Now les's check the "or_cts.tcl" file. inside this we can see the few switches.
+	
+![Capture16](https://user-images.githubusercontent.com/123365828/216832265-dc7a69af-0920-4e60-9d2e-3089388a1481.PNG)
+
+Now lets check what the library does. For this command is 
+	
+	"echo ::env(LIB_TYPICAL)"
+
+Now checking the clock period of this by command: "echo $::env(SYNTH_MAX_TRAN)"
+
+So, clock period seted as 2.473 nsec.
+
+Then checking the max cap value, by command : "echo $::env(CTS_MAX_CAP)". and it is setted as 1.53169
+
+Now checking the branch buffer cells by command :"echo $::env(CTS_CLK_BUFFER_LIST)". and these are the buffer cells are listed there "sky130_fd_sc_hd__clkbuf_1 sky130_fd_sc_hd__clkbuf_2 sky130_fd_sc_hd__clkbuf_4 sky130_fd_sc_hd__clkbuf_8".
+
+And last cheching the root buffer by command: "echo $::env(CTS_ROOT_BUFFER)". So, we find that this "sky130_fd_sc_hd__clkbuf_16 " buffer is root buffer.
+	
+![Capture17](https://user-images.githubusercontent.com/123365828/216832365-cb8a91cf-9337-4cbe-be08-8658848b91c5.PNG)
+
+### Timing analysis with real clocks using openSTA
+	
+### Setup timing analysis using real clocks
+	
+With real clock, circuit looks littel bit different then ideal clock. Here the bufferes and wires are added to the circuts.
+
+Here, due to buffer, clock signals are not reaching the flop at t=0. it will reach at t=0+(delay of buffer 1 and 2).Now equation change to (θ+1+2)<(T+1+3+4).
+
+![image](https://user-images.githubusercontent.com/123365828/216832409-df57bc29-530d-4aa4-b075-b9e94ebc9040.png)
+
+Let's called "1+2"=∆1 and "1+3+4"=∆2 and (∆1-∆2)=skew
+	
+![image](https://user-images.githubusercontent.com/123365828/216832435-63084f53-8bd1-4aa8-9972-79c3dc059173.png)
+
+And here also, we have to consider the propogation skew (s) and uncertainty delay (US). so final equaltion becomes like, (θ+∆1)<(T+∆2-S-US).
+
+we can also say that (θ+∆1)= data arrival time and (T+∆2-S-US)=data required time.
+If (Data required time)- (Data arrival time) = +ve then it is fine. If it is -Ve then it is called 'slack'.
+
+Hold timing analysis
+It is littel bit different then setup timing analysis. here we are sending the first pulse to the both launch FLop and capture flop.
+
+Hold condition state that, Hold time (H)< combinational delay (θ). So, (θ>H).
+	
+![image](https://user-images.githubusercontent.com/123365828/216832457-c4736121-3194-467c-b629-adde424a7d54.png)
+
+Hence, finite time 'H' required for 'Qm' to reach Q i.e., internal delay of mux2= hold time.
+
+Now, if we add the real time clock, the equation will be change. now equation becomes (θ+∆1)>(H+∆2).
+	
+![image](https://user-images.githubusercontent.com/123365828/216832477-06cbbe24-8a1d-4719-be29-51554ecefc99.png)
+
+### Hold time analysis with real clock
+	
+Now here also adding the Unsetainty delay(UH) value due to jitter. so, equation becomes like, (θ+∆1)>(H+∆2+UH).
+
+we can also say that (θ+∆1)= data arrival time and (H+∆2+UH)=data required time.
+
+If (Data arrival time) -(Data required time)= +ve then it is fine. If it is -Ve then it is called 'slack'.
+
+Now, applying all these things in out network.
+
+![image](https://user-images.githubusercontent.com/123365828/216832516-e6758e7c-3c06-4e22-b639-96768aac2bf2.png)
+
+### Lab steps to analyze timing with real clock using OpenSTA
+	
+let's open the OPENROAD tool in the flow by "openroad" command.
+
+our objective is to do analysis of the clock tree.
+
+we are analysin this in the OpenROAD because OpenSTA is already built in the OpenROAD. In OpenROAD the timing analysis is done in a different way. first we have to create "db" and "db" is created in a "lef" and "def" file.
+
+Now let's create the DB. To create the DB, first we have to read the lrf file by comand "% read_lef /openLANE_flow/designs/picorv32a/runs/29-01_22-23/tmp/merged.lef".
+
+Then we read the "def" file by command: "read_def /openLANE_flow/designs/picorv32a/runs/29-01_22-23/results/cts/picorv32a.cts.def".
+
+NOw to create the DB write the command "write_db pico_cts.db"
+
+NOW read this db file by command "read_db pico_cts.db"
+
+then read the verilog file by applying the command "read_verilog /openLANE_flow/designs/picorv32a/runs/29-01_22-23/results/synthesis/picorv32a.synthesis_cts.v"
+
+then read the library (max) by this command:"read_liberty -max $::env(LIB_FASTEST)".
+
+similarly read the library (min) by this command: "read_liberty -min $::env(LIB_SLOWEST)".
+
+Now read the sdc file by this command: "read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc"
+
+now set the clocks by this command:"set_propagated_clock [all_clocks]"
+
+there reports the checks by this command: "report_checks -path_delay min_max -format full_clock_expanded -digits 4".
+
+so after running this we can see that the slack is positive for hold and setup both. and also we can notice the data required time and data arroval time also.
+
+So, the Hold slack = 1.43 nsec because here we can see that (arrivel time) >(required time).
+	
+![Capture18](https://user-images.githubusercontent.com/123365828/216832586-3b32c835-2b1d-4c8d-8348-7b0af9275508.PNG)
+	
+NOw setup slack = 14.6288 nsec because here we can see that (required time)>(arrival time).
+	
+Lab steps to execute openSTA with right timing libraries and CTS assignment
+TritonCTS is right now built according to optimize fully according to one corner and we had bulid the clock tree for typical corner. and library also min and max. so we made tree according to typical corner but we analize it according to one corner. so, analysis become incorrect.
+
+so, first we exits from the openroad by using "exit" command and we have to include the typical library for typical analysis. for that we have to open the "openroad" again and add this typical library. now we don't need to add lef and def file here. now commands for the adding a file is:
+
+read_db pico_cts.db
+
+read_verilog /openLANE_flow/designs/picorv32a/runs/29-01_22-23/results/synthesis/picorv32a.synthesis_cts.v
+
+read_liberty $::env(LIB_SYNTH_COMPLETE)
+
+link_design picorv32a
+
+read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
+
+set_propagated_clock [all_clocks]
+
+report_checks -path_delay min_max -format full_clock_expanded -digits 4
+
+slack for typical coirner= 0.1075 nsec
+
+![Capture19](https://user-images.githubusercontent.com/123365828/216832751-2baf0a13-7c91-441d-aa0d-9aa313da18b4.PNG)
+
+Now checking the branch buffer cells by command :"echo $::env(CTS_CLK_BUFFER_LIST)". and these are the buffer cells are listed there "sky130_fd_sc_hd__clkbuf_1 sky130_fd_sc_hd__clkbuf_2 sky130_fd_sc_hd__clkbuf_4 sky130_fd_sc_hd__clkbuf_8".
+
+when openlane are making the CTS, at that time this buffers are place in the clock path to meet the skew value. and we always want skew value is maximum to the 10% of clock period.
+
+
 
 
 
