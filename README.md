@@ -3020,6 +3020,305 @@ Now checking the branch buffer cells by command :"echo $::env(CTS_CLK_BUFFER_LIS
 
 when openlane are making the CTS, at that time this buffers are place in the clock path to meet the skew value. and we always want skew value is maximum to the 10% of clock period.
 
+# Day 11
+
+## Day 5 -Final steps to build power distribution network
+
+### Routing and design rule check(DRC)
+
+### Introduction to Maze Routing A lee As Algorithm
+
+Next stage in the physical design is the routing and DRC stage.
+
+Routing. by the name it is says that rout means make physical contact between Din1 and FF1 od stage 1. but algorithm wise,it understand that Din1 is the source and FF1 input pin is the target. so, algorthm has to find the best possible solution to connect the Din1 and FF1.
+
+For that we use Maze Routing and Lee's algorithm. let's try to connect Block 1 and block 2 of stage 3. there are varies mathod to connect these blocks but we need best solution for the rout or connection. To understand that, we remove all other things.
+
+Algorithm create the routing gird at backend. here algirithm create two points. one is source and other is target. Now by using this routing grid, algorithm find the best way of routing. algorithm marks the adgecent grids of source. similarly again it will find the adgecent grids of the previos grids.similarly this process will runs continuosly.
+
+![image](https://user-images.githubusercontent.com/123365828/216833242-2ff53413-acc0-4adc-b1a9-7faa8e221024.png)
+
+#### lee's algorithm conclusion.
+	
+The extanding process of adgecent grids are contionuous till it reaches to the target.
+	
+![image](https://user-images.githubusercontent.com/123365828/216833284-5843ae69-8e79-456d-9c6f-4ab39afde1e1.png)
+
+there is many ways to reach the target. but the best possible way is 'L' shaped way.
+	
+![image](https://user-images.githubusercontent.com/123365828/216833305-99001269-e8e1-4fff-aaf0-2c3c68778bbf.png)
+
+lets take another example for this routing.
+	
+![image](https://user-images.githubusercontent.com/123365828/216833343-784ea00b-86ab-4f24-8a45-707d2ecacfcc.png)
+
+Now, we reouted all the blocks and the circuits looks like this,
+	
+![image](https://user-images.githubusercontent.com/123365828/216833374-ed1e29cf-53f5-4a3b-b744-40fb9b3f5ec2.png)
+
+#### DRC(Design Rule check)
+	
+While doing the routing, we need to follow certain rules for that. this is called DRC cleaning.
+
+Lets take two parallel wires from the circuit for example,
+	
+![image](https://user-images.githubusercontent.com/123365828/216833417-542695f9-23d8-42a2-b9d8-576731a13839.png)
+
+Rule. 1
+	
+Width of the wire should be minimum that derived from the optical wavelenth of lithography technique applied.
+	
+![image](https://user-images.githubusercontent.com/123365828/216833441-37f65027-bafa-4cb7-91ab-e956ef840193.png)
+
+Rule. 2
+	
+The minimum pitch between two wire shold be this much.
+	
+![image](https://user-images.githubusercontent.com/123365828/216833631-2c651c6a-ba70-42cf-bd3d-a67b52890158.png)
+
+Rule. 3
+	
+The wire spacing between two wires should be this much.
+	
+![image](https://user-images.githubusercontent.com/123365828/216833680-6b583b7e-57a3-4e8c-b396-6e832cb6b2a1.png)
+
+Let's take other part for understand the rules. basic problem in this types of wire is the signal short.
+
+![image](https://user-images.githubusercontent.com/123365828/216833709-81085c72-0af8-4465-9b6b-0ed595a20144.png)
+
+Solution of this signal short problem is take one of the wire and put it on the other metal layer. usually upper metal is wider than the lower metal.
+
+![image](https://user-images.githubusercontent.com/123365828/216833731-c976101f-929f-4326-a6ab-00176aa8f4a7.png)
+
+After this solution, we add two new DRC rules should be check.
+
+Rule. 1
+
+via width should be some minimum value.
+
+![image](https://user-images.githubusercontent.com/123365828/216833764-fa409908-5a2b-48b9-98f0-4ba18dfafad8.png)
+
+Rule. 2
+
+Via spacing should be minimum this.
+
+![image](https://user-images.githubusercontent.com/123365828/216833791-8c816067-d0c2-444a-a309-811bcdbb7f2b.png)
+
+Next step is paracitic Extraction. so, the wire will get some resistance and capacitance value.
+
+![image](https://user-images.githubusercontent.com/123365828/216833831-005d825d-9655-4c3b-afb9-28b96d4e72b4.png)
+
+### Power distribution network and routing
+
+### Leb steps to build power distribution network
+
+In case, our terminal is delected by some cause, the if we want the previos terminal once again then this steps should be followed:
+
+	docker
+	./flow.tcl -interactive
+	package require openlane 0.9
+	prep -design picorv32a -tag [run file name i.e., 20-01_22-23]
+	
+Now to check the which was the last stage we perorm, the command is:"echo $::env(CURRENT_DEF)".
+
+So, till now we have done CTS and now we are going to do the routing. but before routing we have to generate the PDN(power distribution network)file. for that command is: "gen_pdn".
+
+
+
+Here we can see the total number of nodes on the net VGND and it is also says that Grid matrix is created successfully. here total connection between all PDN nodes establish in the net VGND.
+
+Now, till here we have picorv32a chip, and it needs the power. so it will get power from VDD and GND pads. From the pads, power goes to the tracks and from the tracks, the cells get power.
+
+#### Lab steps from power straps to standerd cell power
+
+To understan this, take an example here,
+
+![image](https://user-images.githubusercontent.com/123365828/216833896-0781e0b3-6c2d-4b67-a150-2cb5f4a14fda.png)
+
+In this figure, the green box is available is let say picorv32a chip. And the yellow, red and blue boxes which are the shown on the outside of the frame are the I/O pins and the power and ground pads. in this pads, the corner ones are called corner pads.
+
+Red pads are the power pads and Blue pads are ground pads.
+
+Power is transfered to the rings from the pads through Via which is shown by black dots on the cross section points of the ring and pads.
+
+Now we need to insure that the power is transfered from the ring to the chip. for that we have vertiocal and horizontal tracks which are also shown by the red and blue color.
+
+NOw, we need to supply power to the standerd cell (Which are shown by rectangular white boxes) from these tracks. this is done by horizontal small connections shown in the figure.
+
+So, in a lab we have done this all the things till power distribution.
+
+Now next and the final step is routing.
+
+#### Basic and Global detailed routing and configure TritonRoute
+
+Now current def.file is change to pdn.def from the cts.def. pdn.def file is now in the "runs/29-01_22-23/tem/floorplan/pdn.def".
+
+In the routing process we are focusing on the routing strategy. there are 5 routing strategies are there. 0,1,2,3 and 14. routing is done in the TritonRoute engine. we have to specifies the strategy for the routing. for example if we ser the strategy to 14 then "TritonRoute14" strategy is used.
+
+If we set the TritonRouting strategy to "0" then it want converge to a 0 TRC routing. but because of this we will improve in the memory requirement and run time. if we use TritonRoute14 then the run time will be approximate 1 hours. but in the TritonRoute0 it will be around the 30 minutes. here we use the "TritonRoute0". so in our flow first we check the routing strategy by the command "echo $::env(ROUTING_STRATEGY)". if it is "0" then it is fine, otherwise we have to change the strategy to "0".
+
+Now the last thing remains is routing. for that command is :"run_routing".
+
+The routing process is very complex.So, total routing is devided into two part.
+
+	- Fast route (Global route)
+	- Detailed route
+	
+![image](https://user-images.githubusercontent.com/123365828/216834143-615ba2b0-e48e-4084-8008-ed0136da6eaf.png)
+
+In the Global route, the routing region is devided into the rectangular grids cells as shown in the figure. and it is represented as 3D routing graph. Global route is done by FAST route engine.The detailed route is done by TritonRoute engine.
+
+As shown in the figure, A,B,C,D are four pins which we want to connects through routing. and this whole image of A,B,C,D show the nets.
+
+Now, the routing is successfully done.
+
+
+
+#### Tritinroute features
+
+#### TritonRoute feature 1 -Honors pre-processed route guide
+
+![image](https://user-images.githubusercontent.com/123365828/216834189-a49ec161-8a43-4a97-b013-2ef512107c39.png)
+
+	- It performs initial detail route.
+	- It attempts as much as possible to route within route guides.
+	
+requierment of processed guides are 1)should have within unit lenth 2)should be in the preferred direction.
+
+![image](https://user-images.githubusercontent.com/123365828/216834218-49bea706-cbc2-4844-9d65-ea9530dd3b7c.png)
+
+	- Assumes route guides for each net satisfy inter-guide connectivity.
+
+If two guides are connected then 1) they are on the same metal layer with touching edges. 2) they are on the neighbouring metal layers with a nonzero vertically overlapped area.
+
+	- Assumes route guides for each net satisfy inter-guide connectivity.
+
+#### TritonRoute feature 2 & 3 - inter-guide connectivity and intra-layer & inter -layer routing
+
+Each unconnected terminal. i.e, poin of a standerd-cell instance should have its pin shape overlapped by a route guide.
+
+![image](https://user-images.githubusercontent.com/123365828/216835254-ab7398c0-0f2c-4c7e-9036-5acc1b51a2fc.png)
+
+Here we can see that black dots are pins of the cells and it is overlapped by route guide. if you have pins on the intersection of the vertical and horizontal tracks that will ensure that it will be overlapped by route guides.
+
+Intra-layer parallel and inter-layer sequential panel routing
+Intra layer means within the layers and inter layear means between the layers.
+
+![image](https://user-images.githubusercontent.com/123365828/216835282-05ff3357-144e-4964-aab0-7947c5391dcb.png)
+
+In this figure we can see the 4 layers of metal. each of these layers are devided in to the "--" lines. lets focus on metal 2 layer. here we assume the routing direction vertical. These "--" lines are called pannels. each pannels assigns the routing guides. here we can see the blue arrows. here routing is heppenes in the even index. it means that intra layer parallel routing. first it is heppenes in the even index and the it will heppen in the odd index. but it is heppening in the parallel in this perticular layer.
+
+So, the (a) figure shows the parallel routing of panels on M2.In (b) figure, we can see the parallel routing of even panels on M3 and (c) shows the parallel routing of odd panels on M3.
+
+#### TritonbRoute method to handle connectivity
+
+	- INPUTS: LEF
+	- OUTPUTS:detailed routing solution with optimized wore-length and via count
+	- CONSTRAINTS:Route guide honouring, connectivity constraonts and design rukes
+
+Now we have to defined the space where detailed routing take spaced.
+
+#### Handling connectivity
+
+![image](https://user-images.githubusercontent.com/123365828/216835415-feb82f45-7288-4de8-843b-b7e5e3e998c3.png)
+
+To handle the connectivity, two concepts comes into the picture,
+
+	- Access point:An on-gride point on the metal layer of the route guide, and is used to connect to lower-layer segments, upper-layer segments, pins or IO ports.
+	- Access point cluster (APC): A union of all access points derived from same lower-layer segment,upper-layer guide, a pin or an IO port
+
+Here in the figure shown above, the illustration of access points:
+
+	(a)To a lower-layer segment
+
+	(b)To a pin shape
+
+	(c)To upper layer
+
+#### Routing topology algorithm and final files list post-route
+
+![image](https://user-images.githubusercontent.com/123365828/216835491-0bb615e1-2626-4e9c-b4a7-b87c4240b87d.png)
+
+The algorithm says that for each APCs we have to find the cost associated with it and we have to do minimum spaning tree betweem the APCs and the cost. finally the conclusion of the algorithm is that we have to find the minimul and the most optimal poits between two APCs.
+
+Now, remaning things is the post routing STA analysis. for that the first goal is to extract the perasetic (SPEF). This SPEF extraction is done outside the openlane because openlane does not have SPEF extraction tool.
+
+The .spef file can be found under the routing folder under the results folder.
+
+![image](https://user-images.githubusercontent.com/123365828/216835506-a2664cb1-a6a0-42d2-9319-665b44a005d7.png)
+
+The following command can be used to stream in the generated GDSII file.
+
+"run_magic"
+
+Now the gds file will be generated and it is stored in the magic folder under results folder.
+
+![image](https://user-images.githubusercontent.com/123365828/216835521-1f1117f0-2e07-4eaa-9cbb-652c58258790.png)
+
+And the generated layout is,
+
+![image](https://user-images.githubusercontent.com/123365828/216835539-100997f8-4336-48c7-be4a-01f7caaf94ba.png)
+
+#### All commands to run the openlane flow
+
+	docker
+
+	./flow.tcl -interactive
+
+	package require openlane 0.9
+
+	prep -design picorv32a
+
+	set ::env(SYNTH_STRATEGY) "DELAY 0"
+
+	run_synthesis
+
+	init_floorplan
+
+	place_io
+
+	global_placement_or
+
+	detailed_placement
+
+	tap_decap_or
+
+	detailed_placement
+
+	run_cts
+
+	gen_pdn
+
+	run_routing
+
+	run_magic
+
+# References
+
+Workshop Github material
+
+	https://github.com/google/skywater-pdk
+	https://github.com/nickson-jose/vsdstdcelldesign
+	https://sourceforge.net/projects/ngspice/
+	https://github.com/
+	https://www.vlsisystemdesign.com/wp-content/uploads/2017/07/Introduction-to-Industrial-Physical-Design-Flow.pdf
+	https://github.com/piyushkandoriya/Advance-Physical-Design-using-openLANE-Sky130
+	https://github.com/Richa297/RTLSky130Workshop
+	https://github.com/nickson-jose/vsdstdcelldesign/
+	https://github.com/CPA872/openlane
+	https://github.com/MalayMDas/VLSI-Physical-Design-Workshop
+	https://github.com/efabless/openlane
+
+
+# Acknowledgement
+
+Mr. kunal ghosh (co.-founder of VLSIsystem design (VSD) corp.pvt.ltd.) 
+
+Mr.Nickson Jose 
+
+Mr. SUMANTO KAR 
+
+
 
 
 
