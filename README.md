@@ -3123,7 +3123,7 @@ Now to check the which was the last stage we perorm, the command is:"echo $::env
 
 So, till now we have done CTS and now we are going to do the routing. but before routing we have to generate the PDN(power distribution network)file. for that command is: "gen_pdn".
 
-
+![KSW1](https://user-images.githubusercontent.com/123365828/216838185-451d184d-2d2a-4e5f-a5f7-f417b7034ba4.PNG)
 
 Here we can see the total number of nodes on the net VGND and it is also says that Grid matrix is created successfully. here total connection between all PDN nodes establish in the net VGND.
 
@@ -3172,7 +3172,7 @@ As shown in the figure, A,B,C,D are four pins which we want to connects through 
 
 Now, the routing is successfully done.
 
-
+![ksw2](https://user-images.githubusercontent.com/123365828/216838135-2e0f7a20-348c-4227-b104-9b6c810898f4.PNG)
 
 #### Tritinroute features
 
@@ -3245,6 +3245,7 @@ Now, remaning things is the post routing STA analysis. for that the first goal i
 
 The .spef file can be found under the routing folder under the results folder.
 
+![Capture22](https://user-images.githubusercontent.com/123365828/216838108-3dfa1078-aab9-416f-962a-67351fef3501.PNG)
 
 The following command can be used to stream in the generated GDSII file.
 
@@ -3252,9 +3253,11 @@ The following command can be used to stream in the generated GDSII file.
 
 Now the gds file will be generated and it is stored in the magic folder under results folder.
 
+![Capture23](https://user-images.githubusercontent.com/123365828/216838097-d6698df0-3e78-4f76-beef-8a55f286b402.PNG)
 
 And the generated layout is,
 
+![Capture24](https://user-images.githubusercontent.com/123365828/216838088-a16c4874-a3b9-4327-94bb-5d60cd93479d.PNG)
 
 #### All commands to run the openlane flow
 
