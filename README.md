@@ -3245,7 +3245,6 @@ Now, remaning things is the post routing STA analysis. for that the first goal i
 
 The .spef file can be found under the routing folder under the results folder.
 
-![image](https://user-images.githubusercontent.com/123365828/216835506-a2664cb1-a6a0-42d2-9319-665b44a005d7.png)
 
 The following command can be used to stream in the generated GDSII file.
 
@@ -3253,11 +3252,9 @@ The following command can be used to stream in the generated GDSII file.
 
 Now the gds file will be generated and it is stored in the magic folder under results folder.
 
-![image](https://user-images.githubusercontent.com/123365828/216835521-1f1117f0-2e07-4eaa-9cbb-652c58258790.png)
 
 And the generated layout is,
 
-![image](https://user-images.githubusercontent.com/123365828/216835539-100997f8-4336-48c7-be4a-01f7caaf94ba.png)
 
 #### All commands to run the openlane flow
 
