@@ -2822,7 +2822,7 @@ After running the floorplaning and done the global placement we get positive sla
 
 Then check the file which is created. Go to the placements folder under results and then invoke the magic tool and load the def file. The command is:
 
-magic -T /home/kunalg123/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read 	picorv32a.placement.def &
+magic -T /home/khaing_su_wai/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read 	picorv32a.placement.def &
 
 ![Capture12](https://user-images.githubusercontent.com/123365828/216831420-a2b3316b-344b-4be1-954a-b10fcbb9d82c.PNG)
 
@@ -2965,15 +2965,15 @@ our objective is to do analysis of the clock tree.
 
 we are analysin this in the OpenROAD because OpenSTA is already built in the OpenROAD. In OpenROAD the timing analysis is done in a different way. first we have to create "db" and "db" is created in a "lef" and "def" file.
 
-Now let's create the DB. To create the DB, first we have to read the lrf file by comand "% read_lef /openLANE_flow/designs/picorv32a/runs/29-01_22-23/tmp/merged.lef".
+Now let's create the DB. To create the DB, first we have to read the lrf file by comand "% read_lef /openLANE_flow/designs/picorv32a/runs/05-02_07-02/tmp/merged.lef".
 
-Then we read the "def" file by command: "read_def /openLANE_flow/designs/picorv32a/runs/29-01_22-23/results/cts/picorv32a.cts.def".
+Then we read the "def" file by command: "read_def /openLANE_flow/designs/picorv32a/runs/05-02_07-02/results/cts/picorv32a.cts.def".
 
 NOw to create the DB write the command "write_db pico_cts.db"
 
 NOW read this db file by command "read_db pico_cts.db"
 
-then read the verilog file by applying the command "read_verilog /openLANE_flow/designs/picorv32a/runs/29-01_22-23/results/synthesis/picorv32a.synthesis_cts.v"
+then read the verilog file by applying the command "read_verilog /openLANE_flow/designs/picorv32a/runs/05-02_07-02/results/synthesis/picorv32a.synthesis_cts.v"
 
 then read the library (max) by this command:"read_liberty -max $::env(LIB_FASTEST)".
 
@@ -3000,7 +3000,7 @@ so, first we exits from the openroad by using "exit" command and we have to incl
 
 read_db pico_cts.db
 
-read_verilog /openLANE_flow/designs/picorv32a/runs/29-01_22-23/results/synthesis/picorv32a.synthesis_cts.v
+read_verilog /openLANE_flow/designs/picorv32a/runs/05-02_07-02/results/synthesis/picorv32a.synthesis_cts.v
 
 read_liberty $::env(LIB_SYNTH_COMPLETE)
 
@@ -3312,7 +3312,9 @@ Workshop Github material
 
 # Acknowledgement
 
-Mr. kunal ghosh (co.-founder of VLSIsystem design (VSD) corp.pvt.ltd.) 
+Mr. kunal ghosh 
+
+Nanditha Rao
 
 Mr.Nickson Jose 
 
